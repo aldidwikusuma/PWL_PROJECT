@@ -38,9 +38,7 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
+                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
 
@@ -70,6 +68,7 @@
 
                     {{ __('You are logged in!') }}
                     <a href="{{ config("data.route.admin.index") }}">Dashboard</a>
+
                 </div>
             </div>
         </div>
