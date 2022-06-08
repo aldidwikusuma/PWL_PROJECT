@@ -21,6 +21,15 @@ return [
                 "update" => "genres.update",
                 "edit" => "genres.edit",
                 "delete" => "genres.destroy"
+            ],
+            "schedules" => [
+                "index" => "schedules.index",
+                "create" => "schedules.create",
+                "store" => "schedules.store",
+                "detail" => "schedules.show",
+                "update" => "schedules.update",
+                "edit" => "schedules.edit",
+                "delete" => "schedules.destroy"
             ]
         ]
     ],

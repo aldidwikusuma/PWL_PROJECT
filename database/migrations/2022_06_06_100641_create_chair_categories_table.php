@@ -15,6 +15,7 @@ class CreateChairCategoriesTable extends Migration
     {
         Schema::create('chair_categories', function (Blueprint $table) {
             $table->id();
+            $table->string("category")->unique();
             $table->timestamps();
         });
     }

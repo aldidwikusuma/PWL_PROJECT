@@ -6,7 +6,7 @@
         <form action="{{ route("genres.store") }}" method="post">
 			@csrf
 			<div class="mb-3">
-				<label for="genre_name" class="form-label">Nama Genre Film</label>
+				<label for="genre_name" class="form-label">Film Genre Name</label>
 				<input type="text" name="genre_name" class="form-control @error('genre_name') is-invalid @enderror" id="genre_name" value="{{ old("genre_name") }}" required autofocus>
 				@error('genre_name')
 					<div class="invalid-feedback">
