@@ -7,6 +7,7 @@ use App\Models\Film;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class FilmController extends Controller
 {
@@ -64,20 +65,33 @@ class FilmController extends Controller
      */
     public function store(Request $request)
     {
+        $minyear = config('data.time.min_year');
+        $maxyear = config('data.time.max_year');
+
         $rulesData = [
             "title" => "required|max:255|unique:films",
+            "image" => "required|image|file|max:1024",
             "desc" => "required",
             "hour" => "required|integer|between:0,5",
-            "minute" => "required|integer|between:00,59",
-            "release_year" => "required|string|size:4",
+            "minute" => "required|integer|between:0,59",
+            "release_year" => "required|integer||min:$minyear|max:$maxyear",
             "rating" => "required|integer|min:6|max:20",
             "fk_id_genre" => "required"
         ];
 
         $validatedData = $request->validate($rulesData);
 
+        if ($request->file("image")) {
+            $pathUpload = $request->file("image")->store("public/images/films");
+            $arrayPathUpload = explode("/", $pathUpload);
+
+            unset($arrayPathUpload[0]);
+            $validatedData["image"] = implode("/", $arrayPathUpload);
+        }
+
         $validatedData["duration"] = $validatedData["hour"] * 60 + $validatedData["minute"];
         Arr::forget($validatedData, ["hour", "minute"]);
+
         Film::create($validatedData);
         return redirect(route("films.index"))->with("success", "Data berhasil ditambahkan");
     }
@@ -90,6 +104,8 @@ class FilmController extends Controller
      */
     public function show(Film $film)
     {
+        $film["hour"] = (integer) floor($film["duration"] / 60);
+        $film["minute"] = $film["duration"] % 60;
         return view(config("data.view.admin.films.detail"), [
             "title" => "Detail Films",
             "film" => $film
@@ -104,12 +120,25 @@ class FilmController extends Controller
      */
     public function edit(Film $film)
     {
+        $duration = [
+            "min_hour" => config('data.time.min_hour'),
+            "max_hour" => config('data.time.max_hour'),
+            "min_minute" => config('data.time.min_minute'),
+            "max_minute" => config('data.time.max_minute'),
+        ];
+        $rating = [
+            "min_rating" => config("data.rating.min_rating"),
+            "max_rating" => config("data.rating.max_rating")
+        ];
+
         $film["hour"] = (integer) floor($film["duration"] / 60);
         $film["minute"] = $film["duration"] % 60;
         return view(config("data.view.admin.films.edit"), [
             "title" => "Edit Films",
-            "genres" => Genre::all(),
-            "film" => $film
+            "genres" => Genre::all()->toArray(),
+            "film" => $film,
+            "duration" => $duration,
+            "rating" => $rating
         ]);
     }
 
@@ -122,12 +151,16 @@ class FilmController extends Controller
      */
     public function update(Request $request, Film $film)
     {
+        $minyear = config('data.time.min_year');
+        $maxyear = config('data.time.max_year');
+
         $rulesData = [
             "desc" => "required",
+            "image" => "image|file|max:1024",
             "hour" => "required|integer|between:0,5",
-            "minute" => "required|integer|between:00,59",
-            "release_year" => "required|string|size:4",
-            "rating" => "required|integer|min:6|max:20",
+            "minute" => "required|integer|between:0,59",
+            "release_year" => "required|integer||min:$minyear|max:$maxyear",
+            "rating" => "required|integer|mi    n:6|max:20",
             "fk_id_genre" => "required"
         ];
 
@@ -136,6 +169,14 @@ class FilmController extends Controller
         }
 
         $validatedData = $request->validate($rulesData);
+
+        if ($request->file("image")) {
+            $pathUpload = $request->file("image")->store("public/images/films");
+            $arrayPathUpload = explode("/", $pathUpload);
+            unset($arrayPathUpload[0]);
+            $validatedData["image"] = implode("/", $arrayPathUpload);
+            Storage::delete("public/" . $film->image);
+        }
 
         $validatedData["duration"] = $validatedData["hour"] * 60 + $validatedData["minute"];
         Arr::forget($validatedData, ["hour", "minute"]);
@@ -152,6 +193,9 @@ class FilmController extends Controller
      */
     public function destroy(Film $film)
     {
+        if ($film->image) {
+            Storage::delete("public/" . $film->image);
+        }
         Film::destroy($film->id);
         return redirect(route("films.index"))->with("success", "Data telah dihapus");
     }

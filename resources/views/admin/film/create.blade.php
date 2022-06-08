@@ -1,9 +1,12 @@
 @extends('admin.layouts.main')
 
 @section('container')
-    <h2 class="mt-3">Create new List Film</h2>
-    <div class="col-lg-8 mb-5">
-        <form action="{{ route("films.store") }}" method="post">
+    <h2 class="mb-3">Create new List Film</h2>
+	<div class="col-md-8 p-0 mb-3">
+        <a class="btn btn-primary me-5" href="{{ route(config("data.route.admin.films.index")) }}">Back to Dashboard</a>
+    </div>
+    <div class="col-md-8 mb-5 p-0">
+        <form action="{{ route("films.store") }}" method="post" enctype="multipart/form-data">
 			@csrf
 			<div class="mb-3">
 				<label for="title" class="form-label">Title</label>
@@ -14,16 +17,18 @@
 					</div>
 				@enderror
 			</div>
-			{{-- <div class="mb-3">
-				<label for="image" class="form-label">Post Image</label>
-				<img class="img-preview img-fluid mb-3 col-md-5">
-				<input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" onchange="previewImage()">
+			<div class="mb-3">
+				<label for="image" class="form-label">Image</label>
+				<span>
+					<img class="img-preview img-fluid mb-3 p-0 border-1 border-primary hidden" id="image-preview" style="border: solid">
+				</span>
+				<input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image">
 				@error('image')
 					<div class="invalid-feedback">
 						{{ $message }}
 					</div>
 				@enderror
-			</div> --}}
+			</div>
 			<div class="mb-3">
 				<label for="desc" class="form-label">Description</label>
 				<textarea class="form-control @error('desc') is-invalid @enderror" name="desc" id="desc" rows="3">{{ old("desc") }}</textarea>
@@ -68,15 +73,6 @@
 					@enderror
 				</div>
 			</div>
-			{{-- <div class="mb-3">
-				<label for="slug" class="form-label">Slug</label>
-				<input type="text" name="slug" class="form-control @error('slug') is-invalid @enderror" id="slug" value="{{ old("slug") }}" required>
-				@error('slug')
-					<div class="invalid-feedback">
-						{{ $message }}
-					</div>
-				@enderror
-			</div> --}}
 			<div class="mb-3">
 				<label for="genre" class="form-label @error('fk_id_genre') is-invalid @enderror">Genre</label>
 				@if ($genres)
@@ -132,29 +128,22 @@
     </div>
 
 	<script>
-		// const title = document.querySelector("#title");
-		// const slug = document.querySelector("#slug");
+		const inputImage = document.querySelector("#image");
+		const previewImage = document.querySelector("#image-preview.img-preview");
+		
+		inputImage.onchange = function(){
+			previewImage.classList.remove("hidden")			
+			previewImage.style.display = "block";
+			previewImage.style.height = "350px";
+			previewImage.style.aspectRatio = "2/3";
+			previewImage.style.objectFit = "cover";
 
-		// title.addEventListener("change", function(){
-		// 	fetch("/dashboard/posts/createSlug?title=" + title.value)
-		// 	.then(response => response.json())
-		// 	.then(data => slug.value = data.slug)
-		// })
+			const oFReader = new FileReader();
+			oFReader.readAsDataURL(inputImage.files[0]);
 
-		// function previewImage(){
-		// 	const image = document.querySelector("#image");
-		// 	const imgPreview = document.querySelector(".img-preview");
-
-		// 	imgPreview.style.display = "block";
-		// 	imgPreview.style.maxHeight = "200px";
-		// 	imgPreview.style.maxWidth = "100%";
-
-		// 	const oFReader = new FileReader();
-		// 	oFReader.readAsDataURL(image.files[0]);
-
-		// 	oFReader.onload = function (oFREvent) {
-		// 		imgPreview.src = oFREvent.target.result;
-		// 	}
-		// }
+			oFReader.onload = function (oFREvent) {
+				previewImage.src = oFREvent.target.result;
+			}
+		}
 	</script>
 @endsection

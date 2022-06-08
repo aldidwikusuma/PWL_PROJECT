@@ -25,10 +25,9 @@
             </style>
 			<thead>
 				<tr>
-					<th scope="col">Nomer</th>
+					<th scope="col">Number</th>
 					<th scope="col">Title</th>
-					<th scope="col">Durasi</th>
-					<th scope="col">Tahun Rilis</th>
+					<th scope="col">Duration</th>
 					<th scope="col">Rating</th>
 					<th scope="col">Genre</th>
 					<th scope="col">Action</th>
@@ -40,7 +39,6 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $filmsatuan->title }}</td>
                         <td>{{ $filmsatuan->hour }} Hours {{ $filmsatuan->minute }} Minutes</td>
-                        <td>{{ $filmsatuan->release_year }}</td>
                         <td>{{ $filmsatuan->rating }}</td>
                         <td>{{ $filmsatuan->genre->genre_name }}</td>
                         <td>
