@@ -1,9 +1,13 @@
 @extends('admin.layouts.main')
 
 @section('container')
-    <h2 class="mt-3">Update Film</h2>
-    <div class="col-lg-8 mb-5">
-        <form action="{{ route("films.update", $film->id) }}" method="post">
+    <h2 class="mb-3">Update Film {{ $film->title }}</h2>
+	<div class="col-md-8 p-0 mb-3">
+        <a class="btn btn-primary me-5" href="{{ route(config("data.route.admin.films.index")) }}">Back to Dashboard</a>
+        <a class="btn btn-danger" href="{{ route(config("data.route.admin.films.delete"), $film->id) }}">Delete Data</a>
+    </div>
+    <div class="col-md-8 mb-5 p-0">
+        <form action="{{ route(config("data.route.admin.films.update"), $film->id) }}" method="post" enctype="multipart/form-data">
 			@csrf
             @method("put")
 			<div class="mb-3">
@@ -15,16 +19,25 @@
 					</div>
 				@enderror
 			</div>
-			{{-- <div class="mb-3">
-				<label for="image" class="form-label">Post Image</label>
-				<img class="img-preview img-fluid mb-3 col-md-5">
-				<input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" onchange="previewImage()">
+			<div class="mb-3">
+				<label for="image" class="form-label">Image</label>
+				<span>
+					<img @if ($film->image)
+						src={{ asset("storage/" . $film->image) }}
+						style="display: block; height: 350px; aspect-ratio: 2/3; object-fit:cover;border:solid;"
+					@endif class="img-preview img-fluid mb-3 p-0 border-1 border-primary @if (!$film->image)
+						hidden 
+					@endif" @if (!$film->image)
+						style="border: solid"
+					@endif id="image-preview" >
+				</span>
+				<input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image">
 				@error('image')
 					<div class="invalid-feedback">
 						{{ $message }}
 					</div>
 				@enderror
-			</div> --}}
+			</div>
 			<div class="mb-3">
 				<label for="desc" class="form-label">Description</label>
 				<textarea class="form-control @error('desc') is-invalid @enderror" name="desc" id="desc" rows="3">{{ old("desc", $film->desc) }}</textarea>
@@ -34,12 +47,29 @@
 					</div>
 				@enderror
 			</div>
+
 			<div class="mb-3">
 				<label for="hour" class="form-label">Duration</label>
 				<div class=" input-group">
-					<input type="number" class="form-control @error('hour') is-invalid @enderror" name="hour" id="hour" value="{{ old("hour", $film->hour) }}" required>
+					<select class="form-select @error('hour') is-invalid @enderror" name="hour" id="hour" required>
+						@for ($i = $duration["min_hour"]; $i <= $duration["max_hour"] ; $i++)
+							@if (old("hour", $film->hour) == $i)
+								<option value="{{ $i }}" selected>{{ $i }}</option>
+							@else
+								<option value="{{ $i }}">{{ $i }}</option>
+							@endif
+						@endfor
+					</select>
 					<span class="input-group-text">Hour</span>
-					<input type="number" class="form-control @error('minute') is-invalid @enderror" name="minute" id="minute" value="{{ old("minute", $film->minute) }}" required>
+					<select class="form-select @error('minute') is-invalid @enderror" name="minute" id="minute" required>
+						@for ($i = $duration["min_minute"]; $i <= $duration["max_minute"] ; $i++)
+							@if (old("minute", $film->minute) == $i)
+								<option value="{{ $i }}" selected>{{ $i < 10 ? "0" . $i : $i }}</option>
+							@else
+								<option value="{{ $i }}">{{ $i < 10 ? "0" . $i : $i }}
+							@endif
+						@endfor
+					</select>
 					<span class="input-group-text">Minute</span>
 					@error('hour')
 						<div class="invalid-feedback">
@@ -56,15 +86,20 @@
 
 			<div class="mb-3">
 				<label for="genre" class="form-label @error('fk_id_genre') is-invalid @enderror">Genre</label>
-				<select class="form-select" name="fk_id_genre" id="genre" required>
-					@foreach ($genres as $genresatuan)
-						@if (old("fk_id_genre", $film->fk_id_genre) == $genresatuan->id)
-							<option value="{{ $genresatuan->id }}" selected>{{ $genresatuan->genre_name }}</option>
-						@else
-							<option value="{{ $genresatuan->id }}">{{ $genresatuan->genre_name }}</option>
-						@endif
-					@endforeach
-				</select>
+				@if ($genres)
+					<select class="form-select" name="fk_id_genre" id="genre" required>
+						@foreach ($genres as $genresatuan)
+							@if (old("fk_id_genre", $film->fk_id_genre) == $genresatuan["id"])
+								<option value="{{ $genresatuan["id"] }}" selected>{{ $genresatuan["genre_name"] }}</option>
+							@else
+								<option value="{{ $genresatuan["id"] }}">{{ $genresatuan["genre_name"] }}</option>
+							@endif
+						@endforeach
+					</select>
+				@else
+				{{-- route(config("data.route.admin.genres.index"))  --}}
+					<div class="form-control is-invalid">No Genre. Please add Genre <a href="">here</a></div>
+				@endif
 				@error('fk_id_genre')
 					<div class="invalid-feedback">
 						{{ $message }}
@@ -84,43 +119,42 @@
 
 			<div class="mb-3">
 				<label for="rating" class="form-label">Rating</label>
-				<input type="number" name="rating" class="form-control @error('rating') is-invalid @enderror" id="rating" value="{{ old("rating", $film->rating) }}" required>
+				<select class="form-select @error('rating') is-invalid @enderror" name="rating" id="rating" required>
+					@for ($i = $rating["min_rating"]; $i <= $rating["max_rating"] ; $i++)
+						@if (old("rating", $film->rating) == $i)
+							<option value="{{ $i }}" selected>{{ $i }}</option>
+						@else
+							<option value="{{ $i }}">{{ $i }}</option>
+						@endif
+					@endfor
+				</select>
 				@error('rating')
 					<div class="invalid-feedback">
 						{{ $message }}
 					</div>
 				@enderror
 			</div>
-
-			
 			<button type="submit" class="btn btn-warning">Update Film</button>
 		</form>
     </div>
 
 	<script>
-		// const title = document.querySelector("#title");
-		// const slug = document.querySelector("#slug");
+		const inputImage = document.querySelector("#image");
+		const previewImage = document.querySelector("#image-preview.img-preview");
+		
+		inputImage.onchange = function(){
+			previewImage.classList.remove("hidden")			
+			previewImage.style.display = "block";
+			previewImage.style.height = "350px";
+			previewImage.style.aspectRatio = "2/3";
+			previewImage.style.objectFit = "cover";
 
-		// title.addEventListener("change", function(){
-		// 	fetch("/dashboard/posts/createSlug?title=" + title.value)
-		// 	.then(response => response.json())
-		// 	.then(data => slug.value = data.slug)
-		// })
+			const oFReader = new FileReader();
+			oFReader.readAsDataURL(inputImage.files[0]);
 
-		// function previewImage(){
-		// 	const image = document.querySelector("#image");
-		// 	const imgPreview = document.querySelector(".img-preview");
-
-		// 	imgPreview.style.display = "block";
-		// 	imgPreview.style.maxHeight = "200px";
-		// 	imgPreview.style.maxWidth = "100%";
-
-		// 	const oFReader = new FileReader();
-		// 	oFReader.readAsDataURL(image.files[0]);
-
-		// 	oFReader.onload = function (oFREvent) {
-		// 		imgPreview.src = oFREvent.target.result;
-		// 	}
-		// }
+			oFReader.onload = function (oFREvent) {
+				previewImage.src = oFREvent.target.result;
+			}
+		}
 	</script>
 @endsection

@@ -38,7 +38,9 @@ return [
         "min_hour" => 1,
         "max_hour" => 5,
         "min_minute" => 0,
-        "max_minute" => 59
+        "max_minute" => 59,
+        "min_year" => 2000,
+        "max_year" => (int) date("Y") + 1
     ],
     "rating" => [
         "min_rating" => 7,

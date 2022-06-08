@@ -30,7 +30,7 @@
             <div id="content">
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid py-4" >
+                <div class="container-fluid p-4" >
                     @yield('container')
                 </div>
                 <!-- End of Page Content -->
