@@ -15,7 +15,11 @@ class GenreController extends Controller
      */
     public function index()
     {
-        //
+        $genres = Genre::paginate(5);
+        return view(config("data.view.admin.genres.index"), [
+            "title" => "Table Genres",
+            "genres" => $genres,
+        ]);
     }
 
     /**
@@ -25,7 +29,9 @@ class GenreController extends Controller
      */
     public function create()
     {
-        //
+        return view(config("data.view.admin.genres.create"), [
+            "title" => "Genres Create",
+        ]);
     }
 
     /**
@@ -36,7 +42,14 @@ class GenreController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rulesData = [
+            "genre_name" => "required|max:255|unique:genres",
+        ];
+
+        $validatedData = $request->validate($rulesData);
+
+        Genre::create($validatedData);
+        return redirect(route(config("data.route.admin.genres.index")))->with("success", "Genre has been added");
     }
 
     /**
@@ -58,7 +71,10 @@ class GenreController extends Controller
      */
     public function edit(Genre $genre)
     {
-        //
+        return view(config("data.view.admin.genres.edit"), [
+            "title" => "Genres Edit",
+            "genre" => $genre
+        ]);
     }
 
     /**
@@ -70,7 +86,16 @@ class GenreController extends Controller
      */
     public function update(Request $request, Genre $genre)
     {
-        //
+        $rulesData = [];
+        if ($genre->genre_name != $request->genre_name) {
+            $rulesData["genre_name"] = "required|max:255|unique:genres";
+        }
+
+        $validatedData = $request->validate($rulesData);
+
+        Genre::where("id", $genre->id)->update($validatedData);
+
+        return redirect(route(config("data.route.admin.genres.index")))->with("success", "Genre has been updated");
     }
 
     /**
@@ -81,6 +106,7 @@ class GenreController extends Controller
      */
     public function destroy(Genre $genre)
     {
-        //
+        Genre::destroy($genre->id);
+        return redirect(route(config("data.route.admin.genres.index")))->with("success", "Genre has been deleted");
     }
 }

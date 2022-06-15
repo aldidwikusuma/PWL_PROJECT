@@ -15,7 +15,11 @@ class ChairCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $category = ChairCategory::orderBy("price")->paginate(10);
+        return view(config("data.view.admin.chaircategory.index"), [
+            "title" => "Table Chair Category",
+            "categories" => $category,
+        ]);
     }
 
     /**
@@ -25,7 +29,9 @@ class ChairCategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view(config("data.view.admin.chaircategory.create"), [
+            "title" => "Chair Category Create",
+        ]);
     }
 
     /**
@@ -36,7 +42,17 @@ class ChairCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $minprice = config("data.chairPrice.min");
+        $maxprice = config("data.chairPrice.max");
+        $rulesData = [
+            "category" => "required|max:255|unique:chair_categories",
+            "price" => "required|integer|min:$minprice|max:$maxprice"
+        ];
+
+        $validatedData = $request->validate($rulesData);
+
+        ChairCategory::create($validatedData);
+        return redirect(route(config("data.route.admin.chaircategory.index")))->with("success", "Chair Category has been added");
     }
 
     /**
@@ -58,7 +74,10 @@ class ChairCategoryController extends Controller
      */
     public function edit(ChairCategory $chairCategory)
     {
-        //
+        return view(config("data.view.admin.chaircategory.edit"), [
+            "title" => "Genres Edit",
+            "category" => $chairCategory
+        ]);
     }
 
     /**
@@ -70,7 +89,20 @@ class ChairCategoryController extends Controller
      */
     public function update(Request $request, ChairCategory $chairCategory)
     {
-        //
+        $minprice = config("data.chairPrice.min");
+        $maxprice = config("data.chairPrice.max");
+        $rulesData = [
+            "price" => "required|integer|min:$minprice|max:$maxprice"
+        ];
+        if ($chairCategory->category != $request->category) {
+            $rulesData["category"] = "required|max:255|unique:chair_categories";
+        }
+
+        $validatedData = $request->validate($rulesData);
+
+        ChairCategory::where("id", $chairCategory->id)->update($validatedData);
+
+        return redirect(route(config("data.route.admin.chaircategory.index")))->with("success", "Chair Category has been updated");
     }
 
     /**
@@ -81,6 +113,7 @@ class ChairCategoryController extends Controller
      */
     public function destroy(ChairCategory $chairCategory)
     {
-        //
+        ChairCategory::destroy($chairCategory->id);
+        return redirect(route(config("data.route.admin.chaircategory.index")))->with("success", "Chair Category has been deleted");
     }
 }

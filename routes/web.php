@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\ChairCategoryController;
+use App\Http\Controllers\Admin\ChairController;
 use App\Http\Controllers\Admin\FilmController;
+use App\Http\Controllers\Admin\GenreController;
+use App\Http\Controllers\Admin\RoomController;
+use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -29,10 +34,12 @@ Route::middleware("auth")->group(function(){
     })->name('dashboard');
     
     Route::resource("/dashboard/films", FilmController::class);
-
-    Route::get("dashboard/genres", function (){
-        return dd("Halaman Home");
-    })->name("genres.index");
+    Route::resource("/dashboard/rooms", RoomController::class);
+    Route::resource("/dashboard/schedules", ScheduleController::class);
+    Route::resource("/dashboard/rooms", RoomController::class);
+    Route::resource("/dashboard/genres", GenreController::class)->except(['show']);
+    Route::resource('/dashboard/chair-categories', ChairCategoryController::class)->except(['show']);
+    Route::resource('/dashboard/chairs', ChairController::class)->except(['show']);
 });
 
 

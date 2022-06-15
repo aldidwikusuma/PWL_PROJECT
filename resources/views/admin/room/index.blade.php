@@ -2,7 +2,7 @@
 
 @section('container')
 	{{-- <h2 class="mt-3">{{ auth()->user()->name }} Posts | Total = {{ $total }}</h2> --}}
-    <a class="btn btn-primary mb-3" href="{{ route(config("data.route.admin.films.create")) }}">Create new Film</a>
+    <a class="btn btn-primary mb-3" href="{{ route(config("data.route.admin.rooms.create")) }}">Create new Room</a>
     @if (session()->has("success")) 
         <div class="col-md-5 p-0">  
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -26,28 +26,28 @@
 			<thead>
 				<tr>
 					<th scope="col">Number</th>
-					<th scope="col">Title</th>
-					<th scope="col">Duration</th>
-					<th scope="col">Rating</th>
-					<th scope="col">Genre</th>
+					<th scope="col">Room Name</th>
+					<th scope="col">Chair Row</th>
+					<th scope="col">Chair Column</th>
+					<th scope="col">Room Preview</th>
 					<th scope="col">Action</th>
 				</tr>
 			</thead>
 			<tbody>
-                @foreach ($films as $filmsatuan)                
+                @foreach ($rooms as $room)                
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $filmsatuan->title }}</td>
-                        <td>{{ $filmsatuan->hour }} Hours {{ $filmsatuan->minute }} Minutes</td>
-                        <td>{{ $filmsatuan->rating }}</td>
-                        <td>{{ $filmsatuan->genre->genre_name }}</td>
+                        <td>{{ $room->room_name }}</td>
+                        <td>{{ $room->chair_row }}</td>
+                        <td>{{ $room->chair_col }}</td>
+                        <td>{{ "preview" }}</td>
                         <td>
-                            <a href="{{ route("films.show", $filmsatuan->id) }}" class="btn btn-info">Detail</a>
-                            <a href="{{ route("films.edit", $filmsatuan->id) }}" class="btn btn-warning mx-2">Edit</a>
-                            <form action="{{ route("films.destroy", $filmsatuan->id) }}" class="d-inline" method="post">
+                            <a href="{{ route(config("data.route.admin.rooms.detail"), $room->id) }}" class="btn btn-info">Detail</a>
+                            <a href="{{ route(config("data.route.admin.rooms.edit"), $room->id) }}" class="btn btn-warning mx-2">Edit</a>
+                            <form action="{{ route(config("data.route.admin.rooms.delete"), $room->id) }}" class="d-inline" method="post">
                                 @csrf
                                 @method("delete")
-                                <button onclick="return confirm('Konfirmasi Hapus')" class="btn btn-danger border-0">Delete</button>
+                                <button onclick="return confirm('Warning !!!\nDeleting data makes it possible to delete data related to this data\nSpecially table data CHAIRS and SCHEDULES\nStill Delete ?')" class="btn btn-danger border-0">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -56,6 +56,6 @@
 		</table>
 	</div>
     <div class="d-flex justify-content-center">
-        {{ $films->links() }}
+        {{ $rooms->links() }}
     </div>
 @endsection

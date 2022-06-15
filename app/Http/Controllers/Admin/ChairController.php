@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Chair;
+use App\Models\ChairCategory;
 use Illuminate\Http\Request;
 
 class ChairController extends Controller
@@ -15,7 +16,11 @@ class ChairController extends Controller
      */
     public function index()
     {
-        //
+        $chairs = Chair::orderBy("name")->paginate(10);
+        return view(config("data.view.admin.chairs.index"), [
+            "title" => "Table Chair",
+            "chairs" => $chairs,
+        ]);
     }
 
     /**
@@ -25,7 +30,11 @@ class ChairController extends Controller
      */
     public function create()
     {
-        //
+        $chairCategory = ChairCategory::all()->toArray();
+        return view(config("data.view.admin.chairs.create"), [
+            "title" => "Chair Name Create",
+            "chairCategories" => $chairCategory
+        ]);
     }
 
     /**
@@ -36,7 +45,16 @@ class ChairController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return dd($request);
+        $rulesData = [
+            "name" => "required|max:255|unique:chairs",
+            "fk_id_chair_category" => "required"
+        ];
+
+        $validatedData = $request->validate($rulesData);
+
+        Chair::create($validatedData);
+        return redirect(route(config("data.route.admin.chairs.index")))->with("success", "Chair has been added");
     }
 
     /**
@@ -58,7 +76,12 @@ class ChairController extends Controller
      */
     public function edit(Chair $chair)
     {
-        //
+        $chairCategory = ChairCategory::all()->toArray();
+        return view(config("data.view.admin.chairs.edit"), [
+            "title" => "Chair Name Edit",
+            "chair" => $chair,
+            "chairCategories" => $chairCategory
+        ]);
     }
 
     /**
@@ -70,7 +93,18 @@ class ChairController extends Controller
      */
     public function update(Request $request, Chair $chair)
     {
-        //
+        $rulesData = [
+            "fk_id_chair_category" => "required"
+        ];
+        if ($chair->name != $request->name) {
+            $rulesData["name"] = "required|max:255|unique:chairs";
+        }
+
+        $validatedData = $request->validate($rulesData);
+
+        Chair::where("id", $chair->id)->update($validatedData);
+
+        return redirect(route(config("data.route.admin.chairs.index")))->with("success", "Chair has been updated");
     }
 
     /**
@@ -81,6 +115,7 @@ class ChairController extends Controller
      */
     public function destroy(Chair $chair)
     {
-        //
+        Chair::destroy($chair->id);
+        return redirect(route(config("data.route.admin.chairs.index")))->with("success", "Chair Category has been deleted");
     }
 }

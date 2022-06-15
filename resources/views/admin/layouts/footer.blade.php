@@ -1,7 +1,7 @@
-<footer class="sticky-footer bg-white border-top border-primary">
+<footer class="sticky-footer bg-white border-top border-primary py-3">
     <div class="container my-auto">
         <div class="copyright text-center my-auto">
-            <span class="lead">Copyright &copy; BengakBioskop 2022</span>
+            <span>Copyright &copy; BengakCinema 2022</span>
         </div>
     </div>
 </footer>

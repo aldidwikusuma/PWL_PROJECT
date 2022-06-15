@@ -1,8 +1,7 @@
 @extends('admin.layouts.main')
 
 @section('container')
-	{{-- <h2 class="mt-3">{{ auth()->user()->name }} Posts | Total = {{ $total }}</h2> --}}
-    <a class="btn btn-primary mb-3" href="{{ route(config("data.route.admin.films.create")) }}">Create new Film</a>
+    <a class="btn btn-primary mb-3" href="{{ route(config("data.route.admin.chairs.create")) }}">Create new Chair Name</a>
     @if (session()->has("success")) 
         <div class="col-md-5 p-0">  
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -26,28 +25,25 @@
 			<thead>
 				<tr>
 					<th scope="col">Number</th>
-					<th scope="col">Title</th>
-					<th scope="col">Duration</th>
-					<th scope="col">Rating</th>
-					<th scope="col">Genre</th>
+					<th scope="col">Chair Name</th>
+					<th scope="col">Category</th>
+					<th scope="col">Price</th>
 					<th scope="col">Action</th>
 				</tr>
 			</thead>
 			<tbody>
-                @foreach ($films as $filmsatuan)                
+                @foreach ($chairs as $chair)                
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $filmsatuan->title }}</td>
-                        <td>{{ $filmsatuan->hour }} Hours {{ $filmsatuan->minute }} Minutes</td>
-                        <td>{{ $filmsatuan->rating }}</td>
-                        <td>{{ $filmsatuan->genre->genre_name }}</td>
+                        <td>{{ $chair->name }}</td>
+                        <td>{{ $chair->category->category }}</td>
+                        <td>Rp {{ $chair->category->price }}</td>
                         <td>
-                            <a href="{{ route("films.show", $filmsatuan->id) }}" class="btn btn-info">Detail</a>
-                            <a href="{{ route("films.edit", $filmsatuan->id) }}" class="btn btn-warning mx-2">Edit</a>
-                            <form action="{{ route("films.destroy", $filmsatuan->id) }}" class="d-inline" method="post">
+                            <a href="{{ route(config("data.route.admin.chairs.edit"), $chair->id) }}" class="btn btn-warning mx-2">Edit</a>
+                            <form action="{{ route(config("data.route.admin.chairs.delete"), $chair->id) }}" class="d-inline" method="post">
                                 @csrf
                                 @method("delete")
-                                <button onclick="return confirm('Konfirmasi Hapus')" class="btn btn-danger border-0">Delete</button>
+                                <button onclick="return confirm('Confirm Delete')" class="btn btn-danger border-0">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -56,6 +52,6 @@
 		</table>
 	</div>
     <div class="d-flex justify-content-center">
-        {{ $films->links() }}
+        {{ $chairs->links() }}
     </div>
 @endsection
