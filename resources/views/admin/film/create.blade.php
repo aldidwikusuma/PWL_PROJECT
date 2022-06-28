@@ -6,7 +6,7 @@
         <a class="btn btn-primary me-5" href="{{ route(config("data.route.admin.films.index")) }}">Back to Dashboard</a>
     </div>
     <div class="col-md-8 mb-5 p-0">
-        <form action="{{ route("films.store") }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route(config("data.route.admin.films.store")) }}" method="post" enctype="multipart/form-data">
 			@csrf
 			<div class="mb-3">
 				<label for="title" class="form-label">Title</label>
@@ -40,7 +40,7 @@
 			</div>
 			<div class="mb-3">
 				<label for="hour" class="form-label">Duration</label>
-				<div class=" input-group">
+				<div class="input-group">
 					<select class="form-select @error('hour') is-invalid @enderror" name="hour" id="hour" required>
 						@for ($i = $duration["min_hour"]; $i <= $duration["max_hour"] ; $i++)
 							@if (old("hour") == $i)
@@ -86,8 +86,7 @@
 						@endforeach
 					</select>
 				@else
-				{{-- route(config("data.route.admin.genres.index"))  --}}
-					<div class="form-control is-invalid">No Genre. Please add Genre <a href="">here</a></div>
+					<div class="form-control is-invalid">No Genre. Please add Genre <a href="{{ route(config("data.route.admin.genres.index")) }}">here</a></div>
 				@endif
 				@error('fk_id_genre')
 					<div class="invalid-feedback">

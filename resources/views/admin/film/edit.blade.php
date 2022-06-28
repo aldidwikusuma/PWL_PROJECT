@@ -29,7 +29,7 @@
 						hidden 
 					@endif" @if (!$film->image)
 						style="border: solid"
-					@endif id="image-preview" >
+					@endif id="image-preview">
 				</span>
 				<input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image">
 				@error('image')

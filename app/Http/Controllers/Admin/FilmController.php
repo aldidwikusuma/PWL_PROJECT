@@ -18,14 +18,14 @@ class FilmController extends Controller
      */
     public function index()
     {
-        $films = Film::all();
+        $films = Film::orderBy("title")->paginate(5);
         foreach ($films as $filmsatuan) {
             $filmsatuan["hour"] = (integer) floor($filmsatuan["duration"] / 60);
             $filmsatuan["minute"] = $filmsatuan["duration"] % 60;
         }
 
         return view(config("data.view.admin.films.index"), [
-            "title" => "Films",
+            "title" => "Table Films",
             "films" => $films,
         ]);
     }
@@ -50,7 +50,7 @@ class FilmController extends Controller
         ];
 
         return view(config("data.view.admin.films.create"), [
-            "title" => "Create Films",
+            "title" => "Create Film",
             "genres" => $genres,
             "duration" => $duration,
             "rating" => $rating
@@ -67,15 +67,16 @@ class FilmController extends Controller
     {
         $minyear = config('data.time.min_year');
         $maxyear = config('data.time.max_year');
-
+        $min_rating = config("data.rating.min_rating");
+        $max_rating = config("data.rating.max_rating");
         $rulesData = [
             "title" => "required|max:255|unique:films",
             "image" => "required|image|file|max:1024",
             "desc" => "required",
             "hour" => "required|integer|between:0,5",
             "minute" => "required|integer|between:0,59",
-            "release_year" => "required|integer||min:$minyear|max:$maxyear",
-            "rating" => "required|integer|min:6|max:20",
+            "release_year" => "required|integer|min:$minyear|max:$maxyear",
+            "rating" => "required|integer|min:$min_rating|max:$max_rating",
             "fk_id_genre" => "required"
         ];
 
@@ -93,7 +94,7 @@ class FilmController extends Controller
         Arr::forget($validatedData, ["hour", "minute"]);
 
         Film::create($validatedData);
-        return redirect(route("films.index"))->with("success", "Data berhasil ditambahkan");
+        return redirect(route("films.index"))->with("success", "Film has been added");
     }
 
     /**
@@ -107,7 +108,7 @@ class FilmController extends Controller
         $film["hour"] = (integer) floor($film["duration"] / 60);
         $film["minute"] = $film["duration"] % 60;
         return view(config("data.view.admin.films.detail"), [
-            "title" => "Detail Films",
+            "title" => "Detail Film",
             "film" => $film
         ]);
     }
@@ -134,7 +135,7 @@ class FilmController extends Controller
         $film["hour"] = (integer) floor($film["duration"] / 60);
         $film["minute"] = $film["duration"] % 60;
         return view(config("data.view.admin.films.edit"), [
-            "title" => "Edit Films",
+            "title" => "Edit Film",
             "genres" => Genre::all()->toArray(),
             "film" => $film,
             "duration" => $duration,
@@ -153,6 +154,8 @@ class FilmController extends Controller
     {
         $minyear = config('data.time.min_year');
         $maxyear = config('data.time.max_year');
+        $min_rating = config("data.rating.min_rating");
+        $max_rating = config("data.rating.max_rating");
 
         $rulesData = [
             "desc" => "required",
@@ -160,7 +163,7 @@ class FilmController extends Controller
             "hour" => "required|integer|between:0,5",
             "minute" => "required|integer|between:0,59",
             "release_year" => "required|integer||min:$minyear|max:$maxyear",
-            "rating" => "required|integer|mi    n:6|max:20",
+            "rating" => "required|integer|min:$min_rating|max:$max_rating",
             "fk_id_genre" => "required"
         ];
 
@@ -182,7 +185,7 @@ class FilmController extends Controller
         Arr::forget($validatedData, ["hour", "minute"]);
         Film::where("id", $film->id)->update($validatedData);
 
-        return redirect(route("films.index"))->with("success", "Your posts has been updated");
+        return redirect(route("films.index"))->with("success", "Film has been updated");
     }
 
     /**
@@ -197,6 +200,6 @@ class FilmController extends Controller
             Storage::delete("public/" . $film->image);
         }
         Film::destroy($film->id);
-        return redirect(route("films.index"))->with("success", "Data telah dihapus");
+        return redirect(route("films.index"))->with("success", "Film has been deleted");
     }
 }

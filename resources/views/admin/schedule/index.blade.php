@@ -26,24 +26,25 @@
 			<thead>
 				<tr>
 					<th scope="col">Nomer</th>
-					<th scope="col">Nama Film</th>
-					<th scope="col">Ruangan</th>
-					<th scope="col">Hari</th>
+					<th scope="col">Date</th>
+					<th scope="col">Time - End Playing</th>
+					<th scope="col">Film</th>
+					<th scope="col">Room</th>
 					<th scope="col">Jam</th>
 				</tr>
 			</thead>
 			<tbody>
-                @foreach ($schedules as $schedulesatuan)                
+                @foreach ($schedules as $schedule)                
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $schedulesatuan->day }}</td>
-                        <td>{{ $schedulesatuan->hour }}</td>
-                        <td>{{ $schedulesatuan->film->title }}</td>
-                        <td>{{ $schedulesatuan->room->room_name }}</td>
+                        <td>{{ $schedule->date }}</td>
+                        <td>{{ $schedule->time }} - {{ $schedule->endtime }}</td>
+                        <td>{{ $schedule->film->title }}</td>
+                        <td>{{ $schedule->room->room_name }}</td>
                         <td>
-                            <a href="{{ route("schedules.show", $schedules->id) }}" class="btn btn-info">Detail</a>
-                            <a href="{{ route("schedules.edit", $schedules->id) }}" class="btn btn-warning mx-2">Edit</a>
-                            <form action="{{ route("schedules.destroy", $schedulesatuan->id) }}" class="d-inline" method="post">
+                            <a href="{{ route(config("data.route.admin.schedules.detail"), $schedule->id) }}" class="btn btn-info">Detail</a>
+                            <a href="{{ route(config("data.route.admin.schedules.edit"), $schedule->id) }}" class="btn btn-warning mx-2">Edit</a>
+                            <form action="{{ route(config("data.route.admin.schedules.delete"), $schedule->id) }}" class="d-inline" method="post">
                                 @csrf
                                 @method("delete")
                                 <button onclick="return confirm('Konfirmasi Hapus')" class="btn btn-danger border-0">Delete</button>
