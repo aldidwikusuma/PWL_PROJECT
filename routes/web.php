@@ -1,9 +1,10 @@
 <?php
-
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\FilmController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,11 @@ Route::middleware("auth")->group(function(){
     Route::get("dashboard/genres", function (){
         return dd("Halaman Home");
     })->name("genres.index");
+
+    Route::get('dashboard/user/{user:username}', [UserController::class, "index"])->name("users.index");
+    Route::get('dashboard/user/{user:username}/edit', [UserController::class, "edit"])->name("users.edit");
+    Route::put('dashboard/user/{user:username}/update', [UserController::class, "update"])->name("users.update");
 });
+
 
 

@@ -4,6 +4,11 @@ return [
     "route" => [
         "admin" => [
             "index" => "dashboard",
+            "users" => [
+                "index" => "users.index",
+                "edit" => "users.edit",
+                "edit" => "users.update"
+            ],
             "films" => [
                 "index" => "films.index",
                 "create" => "films.create",
@@ -35,6 +40,10 @@ return [
     ],
     "view" => [
         "admin" => [
+            "users" => [
+                "index" => "admin.profile.index",
+                "edit" => "admin.profile.edit"
+            ],
             "films" => [
                 "index" => "admin.film.index",
                 "create" => "admin.film.create",
