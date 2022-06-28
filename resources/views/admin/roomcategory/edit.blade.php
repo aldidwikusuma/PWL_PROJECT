@@ -1,17 +1,17 @@
 @extends('admin.layouts.main')
 
 @section('container')
-	<h2 class="mb-3">Edit Genre {{ $category->category }}</h2>
+	<h2 class="mb-3">Edit Room Category {{ $category->category }}</h2>
 	<div class="col-md-8 p-0 mb-3">
-		<a class="btn btn-primary me-5" href="{{ route(config("data.route.admin.genres.index")) }}">Back to Dashboard</a>
-		<form action="{{ route(config("data.route.admin.chaircategory.delete"), $category->id) }}" class="d-inline" method="post">
+		<a class="btn btn-primary me-5" href="{{ route(config("data.route.admin.roomcategory.index")) }}">Back to Dashboard</a>
+		<form action="{{ route(config("data.route.admin.roomcategory.delete"), $category->id) }}" class="d-inline" method="post">
 			@csrf
 			@method("delete")
-			<button onclick="return confirm('Confirm Delete')" class="btn btn-danger border-0">Delete</button>
+			<button onclick="return confirm('Warning !!!\nDeleting data makes it possible to delete data related to this data\nSpecially table data ROOMS, SCHEDULES, CHAIRS_ROOMS, and TRANSACTION\nStill Delete ?')" class="btn btn-danger border-0">Delete</button>
 		</form>
 	</div>
 	<div class="col-md-8 mb-5 p-0">
-        <form action="{{ route(config("data.route.admin.chaircategory.update"), $category->id) }}" method="post">
+        <form action="{{ route(config("data.route.admin.roomcategory.update"), $category->id) }}" method="post">
 			@csrf
             @method("put")
 			<div class="mb-3">

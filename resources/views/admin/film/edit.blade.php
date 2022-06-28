@@ -1,10 +1,10 @@
 @extends('admin.layouts.main')
 
 @section('container')
-    <h2 class="mb-3">Update Film {{ $film->title }}</h2>
+    <h2 class="mb-3">Edit Film {{ $film->title }}</h2>
 	<div class="col-md-8 p-0 mb-3">
-        <a class="btn btn-primary me-5" href="{{ route(config("data.route.admin.films.index")) }}">Back to Dashboard</a>
-        <a class="btn btn-danger" href="{{ route(config("data.route.admin.films.delete"), $film->id) }}">Delete Data</a>
+        <a class="btn btn-primary" href="{{ route(config("data.route.admin.films.index")) }}">Back to Dashboard</a>
+        {{-- <a class="btn btn-danger" href="{{ route(config("data.route.admin.films.delete"), $film->id) }}">Delete Data</a> --}}
     </div>
     <div class="col-md-8 mb-5 p-0">
         <form action="{{ route(config("data.route.admin.films.update"), $film->id) }}" method="post" enctype="multipart/form-data">

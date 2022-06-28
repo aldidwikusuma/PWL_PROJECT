@@ -34,7 +34,7 @@
                         <span class="form-control border-1 border-primary">End Playing</span>
                     </div>
                     <div class="col-md-8">
-                        <span class="form-control border-1 border-primary">{{ $schedule->endplaying }}</span>
+                        <span class="form-control border-1 border-primary">{{ $schedule->endtime }}</span>
                     </div>
                 </div>
                 <div class="row my-3 p-0">

@@ -19,9 +19,9 @@ class CreateSchedulesTable extends Migration
             $table->string("time");
             $table->string("endtime");
             $table->unsignedBigInteger('fk_id_film');
-            $table->foreign("fk_id_film")->references("id")->on("films");
+            $table->foreign("fk_id_film")->references("id")->on("films")->onUpdate("cascade")->onDelete("cascade");
             $table->unsignedBigInteger('fk_id_room');
-            $table->foreign("fk_id_room")->references("id")->on("rooms");
+            $table->foreign("fk_id_room")->references("id")->on("rooms")->onUpdate("cascade")->onDelete("cascade");
             $table->timestamps();
         });
     }

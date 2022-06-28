@@ -17,34 +17,16 @@
 					<input type="time" name="time" class="form-control @error('time') is-invalid @enderror" id="time" value="{{ old("time", $timenow) }}" required>
 					@error('date')
 						<div class="invalid-feedback">
-							{{ $message }}
+							{!! $message !!}
 						</div>
 					@enderror
 					@error('time')
 						<div class="invalid-feedback">
-							{{ $message }}
+							{!! $message !!}
 						</div>
 					@enderror
 				</div>
 			</div>
-			{{-- <div class="mb-3">
-				<label for="date" class="form-label">Date</label>
-				<input type="date" name="date" class="form-control @error('date') is-invalid @enderror" id="date" value="{{ old("date") }}" required autofocus>
-				@error('date')
-					<div class="invalid-feedback">
-						{{ $message }}
-					</div>
-				@enderror
-			</div>
-			<div class="mb-3">
-				<label for="time" class="form-label">Time</label>
-				<input type="time" name="time" class="form-control @error('time') is-invalid @enderror" id="time" value="{{ old("time") }}" required autofocus>
-				@error('time')
-					<div class="invalid-feedback">
-						{{ $message }}
-					</div>
-				@enderror
-			</div> --}}
 			<div class="mb-3">
 				<label for="fk_id_film" class="form-label @error('fk_id_film') is-invalid @enderror">Title Film</label>
 				@if ($films)

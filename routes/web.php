@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Admin\ChairCategoryController;
 use App\Http\Controllers\Admin\ChairController;
 use App\Http\Controllers\Admin\FilmController;
 use App\Http\Controllers\Admin\GenreController;
+use App\Http\Controllers\Admin\RoomCategoryController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\HomeController;
@@ -38,8 +38,10 @@ Route::middleware("auth")->group(function(){
     Route::resource("/dashboard/schedules", ScheduleController::class);
     Route::resource("/dashboard/rooms", RoomController::class);
     Route::resource("/dashboard/genres", GenreController::class)->except(['show']);
-    Route::resource('/dashboard/chair-categories', ChairCategoryController::class)->except(['show']);
+    Route::resource('/dashboard/room-categories', RoomCategoryController::class)->except(['show']);
     Route::resource('/dashboard/chairs', ChairController::class)->except(['show']);
+    Route::get('/dashboard/rooms/{room:id}/preview', [RoomController::class, "previewRoom"])->name("room-preview");
+
 });
 
 

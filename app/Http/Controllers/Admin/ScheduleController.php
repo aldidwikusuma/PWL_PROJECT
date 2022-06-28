@@ -19,6 +19,11 @@ class ScheduleController extends Controller
     public function index()
     {
         $schedules = Schedule::orderBy("date")->paginate(7);
+        if ($schedules) {
+            foreach ($schedules as $schedule) {
+                $schedule["date"] = date("d-m-Y", strtotime($schedule->date));
+            }
+        }
         return view(config("data.view.admin.schedules.index"), [
             "title" => "Table Schedules",
             "schedules" => $schedules,
@@ -54,64 +59,55 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request["fk_id_film"] && $request["time"]) {
-            $film = Film::find((integer)$request->fk_id_film);
-            $film["hour"] = (integer) floor($film->duration / 60);
-            $film["minute"] = $film->duration % 60;
-            $duration = $film->hour . ":" . $film->minute;
-            $request["endtime"] = date("H:i", (strtotime($duration) + strtotime($request->time)));
-        }
+        date_default_timezone_set('Asia/Jakarta');        
 
         $rulesData = [
             "date" => "required|date",
             "time" => "required",
-            "endtime" => "required",
             "fk_id_film" => "required",
             "fk_id_room" => "required"
         ];
 
-        $schedules = Schedule::where("date", $request->date)->get()->toArray();
+        $schedules = Schedule::where("date", $request->date)->where("fk_id_room", $request->fk_id_room)->get()->toArray();
         
         $validator = Validator::make($request->all(), $rulesData);
-        
-        // return dd($validator->);
-        // if ($schedules) {
-        //     $validator->after(function ($validator) {
-        //         return dd($schedules);
-        //         foreach ($schedules as $schedule) {
-        //             if ((strtotime($request->time) >= strtotime($schedule["time"])) || (strtotime($request->endtime) <= strtotime($schedule["endtime"]))) {
-        //                 $validator->errors()->add(
-        //                     'time', 'Waktu ini telah digunakan'
-        //                 );
-        //             }
-        //         }
-        //     });
-        // }
-
+        if(strtotime($request->date) < strtotime(date("Y-m-d", strtotime("now")))){
+            $validator->errors()->add(
+                'date', "Date is not valid, date cannot be less than the current date ('" . date("d-m-Y", strtotime("now")) . "')"
+            );
+            return redirect(route(config("data.route.admin.schedules.create")))->withErrors($validator)->withInput();
+        } else {
+            if (strtotime($request->date) == strtotime(date("Y-m-d", strtotime("now")))) {
+                if(strtotime($request->time) < strtotime("now")){
+                    $validator->errors()->add(
+                        'time', "Time is not valid, time cannot be less than the current time ('" . date("H:i", strtotime("now")) . "')"
+                    );
+                    return redirect(route(config("data.route.admin.schedules.create")))->withErrors($validator)->withInput();
+                };
+                
+            }
+        };
 
         if ($schedules) {
             foreach ($schedules as $schedule) {
                 if ((strtotime($request->time) >= strtotime($schedule["time"])) || (strtotime($request->endtime) <= strtotime($schedule["endtime"]))) {
                     $validator->errors()->add(
-                        'time', 'Waktu ini telah digunakan'
+                        'time', "Time has been used for movie " . $schedule["film"]["title"] . " from " . $schedule["time"] ." to " . $schedule["endtime"] . ". Detail <a href=". route(config("data.route.admin.schedules.detail"), $schedule["id"]) ." target='_blank'>here</a>"
                     );
+                    return redirect(route(config("data.route.admin.schedules.create")))->withErrors($validator)->withInput();
                 }
                 // dd("Request Time = " . ($request->time) . " | Schedule Time = " . $schedule["time"] . " | Hasilnya " . (bool)(strtotime($request->time) >= strtotime($schedule["time"])) .  "Request End Time = " . ($request->endtime) . " | Schedule End Time = " . $schedule["endtime"] . " | Hasilnya " . (bool)(strtotime($request->endtime) <= strtotime($schedule["endtime"])));
             }
         }
 
-        // return dd($waktumulai > strtotime($request->time) && strtotime($request->time) < $waktuselesai);
-        // return dd(strtotime($request->time) >= $waktumulai && strtotime($request->time) <= $waktuselesai);
-
-        return dd($validator->failed());
-
-        if ($validator->fails()) {
-            return dd("Waktu salah");
-            return redirect('post/create')->withErrors($validator)->withInput();
-        }
-
         $validatedData = $validator->validated();
-        // return dd($validatedData);
+
+        $film = Film::find((integer)$request->fk_id_film);
+        $film["hour"] = (integer) floor($film->duration / 60);
+        $film["minute"] = $film->duration % 60;
+        $duration = $film->hour . ":" . $film->minute;
+        $validatedData["endtime"] = date("H:i", (strtotime($request->time) - strtotime($duration)));
+
 
         Schedule::create($validatedData);
         return redirect(route(config("data.route.admin.schedules.index")))->with("success", "Schedule has been added");
@@ -125,14 +121,12 @@ class ScheduleController extends Controller
      */
     public function show(Schedule $schedule)
     {
+        $schedule["date"] = date("d-m-Y", strtotime($schedule->date));
         $schedule->film["hour"] = (integer) floor($schedule->film["duration"] / 60);
         $schedule->film["minute"] = $schedule->film["duration"] % 60;
-        $duration = $schedule->film->hour . ":" . $schedule->film->minute;
         
-
-        $schedule["endplaying"] = date("H:i", (strtotime($duration) + strtotime($schedule->time)));
-        // return dd($schedule->endplaying);
-        return view(config("data.view.admin.schedules.detail"), [
+        return view(config("data.view.a
+        dmin.schedules.detail"), [
             "title" => "Detail Schedule",
             "schedule" => $schedule
         ]);
@@ -165,7 +159,70 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $schedule)
     {
-        //
+        date_default_timezone_set('Asia/Jakarta');         
+
+        $rulesData = [
+            "date" => "required|date",
+            "time" => "required",
+            "endtime" => "required",
+            "fk_id_film" => "required",
+            "fk_id_room" => "required"
+        ];
+
+        if ($schedule["date"] != $request["date"] && $schedule["fk_id_room"] != $request["fk_id_room"]) {
+            $schedules = Schedule::whereNotIn("date", $request->date)->whereNotIn("fk_id_room", $request->fk_id_room)->get()->toArray();
+        } else {
+            $schedules = Schedule::where("date", $request->date)->where("fk_id_room", $request->fk_id_room)->get()->toArray();
+        }
+
+        $validator = Validator::make($request->all(), $rulesData);
+
+        if ($schedule["date"] != $request["date"]) {
+            if(strtotime($request->date) < strtotime(date("Y-m-d", strtotime("now")))){
+                $validator->errors()->add(
+                    'date', "Date is not valid, date cannot be less than the current date ('" . date("d-m-Y", strtotime("now")) . "')"
+                );
+                return redirect(route(config("data.route.admin.schedules.create")))->withErrors($validator)->withInput();
+            } else {
+                if (strtotime($request->date) == strtotime(date("Y-m-d", strtotime("now")))) {
+                    if(strtotime($request->time) < strtotime("now")){
+                        $validator->errors()->add(
+                            'time', "Time is not valid, time cannot be less than the current time ('" . date("H:i", strtotime("now")) . "')"
+                        );
+                        return redirect(route(config("data.route.admin.schedules.create")))->withErrors($validator)->withInput();
+                    };
+                }
+            };
+        }
+
+        if ($schedule["time"] != $request["time"]) { 
+            if ($schedules) {
+                foreach ($schedules as $schedule) {
+                    if ((strtotime($request->time) >= strtotime($schedule["time"])) || (strtotime($request->endtime) <= strtotime($schedule["endtime"]))) {
+                        $validator->errors()->add(
+                            'time', "Time has been used for movie " . $schedule["film"]["title"] . " from " . $schedule["time"] ." to " . $schedule["endtime"] . ". Detail <a href=". route(config("data.route.admin.schedules.detail"), $schedule["id"]) .">here</a>"
+                        );
+                        return redirect(route(config("data.route.admin.schedules.create")))->withErrors($validator)->withInput();
+                    }
+                }
+            }
+        }
+
+        $validatedData = $validator->validated();
+
+        if ($request->time != $schedule->time) {
+            $film = Film::find((integer)$request->fk_id_film);
+            $film["hour"] = (integer) floor($film->duration / 60);
+            $film["minute"] = $film->duration % 60;
+            $duration = $film->hour . ":" . $film->minute;
+            $validatedData["endtime"] = date("H:i", (strtotime($request->time) - strtotime($duration)));
+        }
+
+        return dd($validatedData);
+
+        Schedule::where("id", $schedule->id)->update($validatedData);
+
+        return redirect(route(config("data.route.admin.schedules.index")))->with("success", "Schedule has been updated");
     }
 
     /**

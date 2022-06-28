@@ -10,10 +10,15 @@ class Film extends Model
     use HasFactory;
 
     protected $guarded = ["id"];
-    protected $with = ['genre'];
+    protected $with = ['genre', 'schedule'];
 
     public function genre()
     {
         return $this->belongsTo(Genre::class, "fk_id_genre");
+    }
+
+    public function schedule()
+    {
+        return $this->hasMany(Schedule::class);
     }
 }

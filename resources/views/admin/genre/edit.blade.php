@@ -7,7 +7,7 @@
 		<form action="{{ route(config("data.route.admin.genres.delete"), $genre->id) }}" class="d-inline" method="post">
 			@csrf
 			@method("delete")
-			<button onclick="return confirm('Confirm Delete')" class="btn btn-danger border-0">Delete</button>
+			<button onclick="return confirm('Warning !!!\nDeleting data makes it possible to delete data related to this data\nSpecially table data FILMS, SCHEDULES and TRANSACTION\nStill Delete ?')" class="btn btn-danger border-0">Delete</button>
 		</form>
 		{{-- <a class="btn btn-danger" href="{{ route(config("data.route.admin.genres.delete"), $genre->id) }}">Delete</a> --}}
 	</div>

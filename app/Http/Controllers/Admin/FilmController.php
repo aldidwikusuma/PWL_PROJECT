@@ -94,7 +94,7 @@ class FilmController extends Controller
         Arr::forget($validatedData, ["hour", "minute"]);
 
         Film::create($validatedData);
-        return redirect(route("films.index"))->with("success", "Film has been added");
+        return redirect(route(config("data.route.admin.films.index")))->with("success", "Film has been added");
     }
 
     /**
@@ -185,7 +185,7 @@ class FilmController extends Controller
         Arr::forget($validatedData, ["hour", "minute"]);
         Film::where("id", $film->id)->update($validatedData);
 
-        return redirect(route("films.index"))->with("success", "Film has been updated");
+        return redirect(route(config("data.route.admin.films.index")))->with("success", "Film has been updated");
     }
 
     /**
@@ -200,6 +200,6 @@ class FilmController extends Controller
             Storage::delete("public/" . $film->image);
         }
         Film::destroy($film->id);
-        return redirect(route("films.index"))->with("success", "Film has been deleted");
+        return redirect(route(config("data.route.admin.films.index")))->with("success", "Film has been deleted");
     }
 }

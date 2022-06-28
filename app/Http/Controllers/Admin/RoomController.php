@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Chair;
+use App\Models\ChairRoom;
 use App\Models\Room;
+use App\Models\RoomCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class RoomController extends Controller
 {
@@ -16,7 +19,7 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $rooms = Room::orderBy("room_name")->paginate(5);
+        $rooms = Room::orderBy("name")->paginate(5);
         return view(config("data.view.admin.rooms.index"), [
             "title" => "Table Room",
             "rooms" => $rooms,
@@ -39,10 +42,13 @@ class RoomController extends Controller
             "max" => config("data.chairRooms.col.max")
         ];
 
+        $roomCategory = RoomCategory::all()->toArray();
+
         return view(config("data.view.admin.rooms.create"), [
             "title" => "Room Create",
             "row" => $row,
-            "col" => $col
+            "col" => $col,
+            "roomCategories" => $roomCategory
         ]);
     }
 
@@ -59,14 +65,126 @@ class RoomController extends Controller
         $col_min = config("data.chairRooms.col.min");
         $col_max = config("data.chairRooms.col.max");
         $rulesData = [
-            "room_name" => "required|max:255|unique:rooms",
+            "name" => "required|max:255|unique:rooms",
             "chair_row" => "required|integer|between:$row_min,$row_max",
-            "chair_col" => "required|integer|between:$col_min,$col_max"
+            "chair_col" => "required|integer|between:$col_min,$col_max",
+            "fk_id_room_category" => "required"
         ];
 
         $validatedData = $request->validate($rulesData);
 
-        Room::create($validatedData);
+        $room = Room::create($validatedData);
+
+        $row = $room->chair_row;
+        $col = $room->chair_col;
+        $number = 1;
+        for ($i = 0; $i < $row; $i++) { 
+            switch ($i) {
+                // Chair A
+                case 0:
+                    $chairs = Chair::where("name", "like", "A%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair B
+                case 1:
+                    $chairs = Chair::where("name", "like", "B%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair C
+                case 2:
+                    $chairs = Chair::where("name", "like", "C%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair D
+                case 3:
+                    $chairs = Chair::where("name", "like", "D%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair E
+                case 4:
+                    $chairs = Chair::where("name", "like", "E%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair F
+                case 5:
+                    $chairs = Chair::where("name", "like", "F%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair G
+                case 6:
+                    $chairs = Chair::where("name", "like", "G%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair H
+                case 7:
+                    $chairs = Chair::where("name", "like", "H%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair I
+                case 8:
+                    $chairs = Chair::where("name", "like", "I%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair J
+                case 9:
+                    $chairs = Chair::where("name", "like", "J%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         return redirect(route(config("data.route.admin.rooms.index")))->with("success", "Room has been added");
     }
 
@@ -101,11 +219,14 @@ class RoomController extends Controller
             "max" => config("data.chairRooms.col.max")
         ];
 
+        $roomCategory = RoomCategory::all()->toArray();
+
         return view(config("data.view.admin.rooms.edit"), [
             "title" => "Edit Rooms",
             "room" => $room,
             "row" => $row,
             "col" => $col,
+            "roomCategories" => $roomCategory
         ]);
     }
 
@@ -118,21 +239,137 @@ class RoomController extends Controller
      */
     public function update(Request $request, Room $room)
     {
+        $roomId = $room->id;
         $row_min = config("data.chairRooms.row.min");
         $row_max = config("data.chairRooms.row.max");
         $col_min = config("data.chairRooms.col.min");
         $col_max = config("data.chairRooms.col.max");
         $rulesData = [
             "chair_row" => "required|integer|between:$row_min,$row_max",
-            "chair_col" => "required|integer|between:$col_min,$col_max"
+            "chair_col" => "required|integer|between:$col_min,$col_max",
+            "fk_id_room_category" => "required"
         ];
 
-        if ($room->room_name != $request->room_name) {
-            $rulesData["room_name"] = "required|max:255|unique:rooms";
+        if ($room->name != $request->name) {
+            $rulesData["name"] = "required|max:255|unique:rooms";
         }
 
         $validatedData = $request->validate($rulesData);
-        Room::where("id", $room->id)->update($validatedData);
+        $room = Room::where("id", $roomId)->update($validatedData);
+
+        ChairRoom::where("fk_id_room", $roomId)->delete();
+
+        $room = Room::find($roomId);
+        
+        $row = $room->chair_row;
+        $col = $room->chair_col;
+        $number = 1;
+        for ($i = 0; $i < $row; $i++) { 
+            switch ($i) {
+                // Chair A
+                case 0:
+                    $chairs = Chair::where("name", "like", "A%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair B
+                case 1:
+                    $chairs = Chair::where("name", "like", "B%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair C
+                case 2:
+                    $chairs = Chair::where("name", "like", "C%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair D
+                case 3:
+                    $chairs = Chair::where("name", "like", "D%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair E
+                case 4:
+                    $chairs = Chair::where("name", "like", "E%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair F
+                case 5:
+                    $chairs = Chair::where("name", "like", "F%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair G
+                case 6:
+                    $chairs = Chair::where("name", "like", "G%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair H
+                case 7:
+                    $chairs = Chair::where("name", "like", "H%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair I
+                case 8:
+                    $chairs = Chair::where("name", "like", "I%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                // Chair J
+                case 9:
+                    $chairs = Chair::where("name", "like", "J%")->get()->toArray();
+                    $chairArray = [];
+                    for ($j = 0; $j < $col; $j++) { 
+                        $chairArray = Arr::add($chairArray, $chairs[$j]["id"], ["number_chair" => $number]);
+                        $number++;
+                    }
+                    $room->chairs()->attach($chairArray);
+                    break;
+                default:
+                    break;
+            }
+        }
 
         return redirect(route(config("data.route.admin.rooms.index")))->with("success", "Room has been updated");
     }
@@ -147,5 +384,31 @@ class RoomController extends Controller
     {
         Room::destroy($room->id);
         return redirect(route(config("data.route.admin.rooms.index")))->with("success", "Room has been deleted");
+    }
+
+    public function previewRoom(Room $room)
+    {
+        // Opsi 2
+        // $dataChairs = Arr::sort($room->chairs, function ($value) {
+        //     return $value->row;
+        // });
+
+        $dataChairs = $room->chairs()->orderBy("number_chair")->get()->toArray();   
+        $chairs = [];
+
+        // return dd($dataChairs);
+        $number = 0;
+        for ($i=0; $i < $room->chair_row; $i++) { 
+            for ($j=0; $j < $room->chair_col; $j++) { 
+                $chairs[$i][$j] = $dataChairs[$number];
+                $number++;
+            }
+        }
+        
+        return view(config("data.view.admin.rooms.preview.index"), [
+            "title" => "Preview Room",
+            "room" => $room,
+            "chairs" => $chairs
+        ]);
     }
 }

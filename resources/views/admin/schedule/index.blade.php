@@ -47,7 +47,7 @@
                             <form action="{{ route(config("data.route.admin.schedules.delete"), $schedule->id) }}" class="d-inline" method="post">
                                 @csrf
                                 @method("delete")
-                                <button onclick="return confirm('Konfirmasi Hapus')" class="btn btn-danger border-0">Delete</button>
+                                <button onclick="return confirm('Warning !!!\nDeleting data makes it possible to delete data related to this data\nSpecially table data TRANSACTION\nStill Delete ?')" class="btn btn-danger border-0">Delete</button>
                             </form>
                         </td>
                     </tr>

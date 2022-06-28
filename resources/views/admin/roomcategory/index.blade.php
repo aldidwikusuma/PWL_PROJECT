@@ -1,7 +1,7 @@
 @extends('admin.layouts.main')
 
 @section('container')
-    <a class="btn btn-primary mb-3" href="{{ route(config("data.route.admin.chaircategory.create")) }}">Create new Chair Category</a>
+    <a class="btn btn-primary mb-3" href="{{ route(config("data.route.admin.roomcategory.create")) }}">Create new Room Category</a>
     @if (session()->has("success")) 
         <div class="col-md-5 p-0">  
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -37,11 +37,11 @@
                         <td>{{ $category->category }}</td>
                         <td>Rp {{ $category->price }}</td>
                         <td>
-                            <a href="{{ route(config("data.route.admin.chaircategory.edit"), $category->id) }}" class="btn btn-warning mx-2">Edit</a>
-                            <form action="{{ route(config("data.route.admin.chaircategory.delete"), $category->id) }}" class="d-inline" method="post">
+                            <a href="{{ route(config("data.route.admin.roomcategory.edit"), $category->id) }}" class="btn btn-warning mx-2">Edit</a>
+                            <form action="{{ route(config("data.route.admin.roomcategory.delete"), $category->id) }}" class="d-inline" method="post">
                                 @csrf
                                 @method("delete")
-                                <button onclick="return confirm('Confirm Delete')" class="btn btn-danger border-0">Delete</button>
+                                <button onclick="return confirm('Warning !!!\nDeleting data makes it possible to delete data related to this data\nSpecially table data ROOMS, SCHEDULES, CHAIRS_ROOMS, and TRANSACTION\nStill Delete ?')" class="btn btn-danger border-0">Delete</button>
                             </form>
                         </td>
                     </tr>

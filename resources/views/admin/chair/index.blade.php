@@ -26,8 +26,6 @@
 				<tr>
 					<th scope="col">Number</th>
 					<th scope="col">Chair Name</th>
-					<th scope="col">Category</th>
-					<th scope="col">Price</th>
 					<th scope="col">Action</th>
 				</tr>
 			</thead>
@@ -36,14 +34,12 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $chair->name }}</td>
-                        <td>{{ $chair->category->category }}</td>
-                        <td>Rp {{ $chair->category->price }}</td>
                         <td>
                             <a href="{{ route(config("data.route.admin.chairs.edit"), $chair->id) }}" class="btn btn-warning mx-2">Edit</a>
                             <form action="{{ route(config("data.route.admin.chairs.delete"), $chair->id) }}" class="d-inline" method="post">
                                 @csrf
                                 @method("delete")
-                                <button onclick="return confirm('Confirm Delete')" class="btn btn-danger border-0">Delete</button>
+                                <button onclick="return confirm('Warning !!!\nDeleting data makes it possible to delete data related to this data\nSpecially table data CHAIRS_ROOMS, SCHEDULES and TRANSACTION\nStill Delete ?')" class="btn btn-danger border-0">Delete</button>
                             </form>
                         </td>
                     </tr>

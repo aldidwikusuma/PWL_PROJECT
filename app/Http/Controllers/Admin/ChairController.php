@@ -30,10 +30,8 @@ class ChairController extends Controller
      */
     public function create()
     {
-        $chairCategory = ChairCategory::all()->toArray();
         return view(config("data.view.admin.chairs.create"), [
             "title" => "Chair Name Create",
-            "chairCategories" => $chairCategory
         ]);
     }
 
@@ -48,7 +46,6 @@ class ChairController extends Controller
         // return dd($request);
         $rulesData = [
             "name" => "required|max:255|unique:chairs",
-            "fk_id_chair_category" => "required"
         ];
 
         $validatedData = $request->validate($rulesData);
@@ -76,11 +73,9 @@ class ChairController extends Controller
      */
     public function edit(Chair $chair)
     {
-        $chairCategory = ChairCategory::all()->toArray();
         return view(config("data.view.admin.chairs.edit"), [
             "title" => "Chair Name Edit",
             "chair" => $chair,
-            "chairCategories" => $chairCategory
         ]);
     }
 
@@ -93,9 +88,7 @@ class ChairController extends Controller
      */
     public function update(Request $request, Chair $chair)
     {
-        $rulesData = [
-            "fk_id_chair_category" => "required"
-        ];
+        $rulesData = [  ];
         if ($chair->name != $request->name) {
             $rulesData["name"] = "required|max:255|unique:chairs";
         }

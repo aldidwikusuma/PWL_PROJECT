@@ -27,8 +27,8 @@
 				<tr>
 					<th scope="col">Number</th>
 					<th scope="col">Room Name</th>
-					<th scope="col">Chair Row</th>
-					<th scope="col">Chair Column</th>
+					<th scope="col">Chair Row - Col</th>
+					<th scope="col">Room Category</th>
 					<th scope="col">Room Preview</th>
 					<th scope="col">Action</th>
 				</tr>
@@ -37,17 +37,17 @@
                 @foreach ($rooms as $room)                
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $room->room_name }}</td>
-                        <td>{{ $room->chair_row }}</td>
-                        <td>{{ $room->chair_col }}</td>
-                        <td>{{ "preview" }}</td>
+                        <td>{{ $room->name }}</td>
+                        <td>{{ $room->chair_row }} Rows - {{ $room->chair_col }} Cols</td>
+                        <td>{{ $room->category->category }} (Rp. {{ $room->category->price }})</td>
+                        <td><a href="{{ route(config("data.route.admin.rooms.preview.index"), $room->id) }}" class="btn btn-info">Preview</a></td>
                         <td>
                             <a href="{{ route(config("data.route.admin.rooms.detail"), $room->id) }}" class="btn btn-info">Detail</a>
                             <a href="{{ route(config("data.route.admin.rooms.edit"), $room->id) }}" class="btn btn-warning mx-2">Edit</a>
                             <form action="{{ route(config("data.route.admin.rooms.delete"), $room->id) }}" class="d-inline" method="post">
                                 @csrf
                                 @method("delete")
-                                <button onclick="return confirm('Warning !!!\nDeleting data makes it possible to delete data related to this data\nSpecially table data CHAIRS and SCHEDULES\nStill Delete ?')" class="btn btn-danger border-0">Delete</button>
+                                <button onclick="return confirm('Warning !!!\nDeleting data makes it possible to delete data related to this data\nSpecially table data CHAIRS_ROOMS, SCHEDULES and TRANSACTION\nStill Delete ?')" class="btn btn-danger border-0">Delete</button>
                             </form>
                         </td>
                     </tr>

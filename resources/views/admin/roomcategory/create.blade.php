@@ -1,12 +1,12 @@
 @extends('admin.layouts.main')
 
 @section('container')
-	<h2 class="mb-3">Create new Chair Category</h2>
+	<h2 class="mb-3">Create new Room Category</h2>
 	<div class="col-md-8 p-0 mb-3">
-		<a class="btn btn-primary me-5" href="{{ route(config("data.route.admin.chaircategory.index")) }}">Back to Dashboard</a>
+		<a class="btn btn-primary me-5" href="{{ route(config("data.route.admin.roomcategory.index")) }}">Back to Dashboard</a>
 	</div>
 	<div class="col-md-8 mb-5 p-0">
-		<form action="{{ route(config("data.route.admin.chaircategory.store")) }}" method="post">
+		<form action="{{ route(config("data.route.admin.roomcategory.store")) }}" method="post">
 			@csrf
 			<div class="mb-3">
 				<label for="category" class="form-label">Category Name</label>
@@ -26,7 +26,7 @@
 					</div>
 				@enderror
 			</div>
-			<button type="submit" class="btn btn-primary">Add New Chair Category</button>
+			<button type="submit" class="btn btn-primary">Add New Room Category</button>
 		</form>
 	</div>
 @endsection

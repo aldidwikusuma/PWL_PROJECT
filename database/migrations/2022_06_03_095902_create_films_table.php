@@ -22,7 +22,7 @@ class CreateFilmsTable extends Migration
             $table->integer("release_year");
             $table->string("rating");
             $table->unsignedBigInteger('fk_id_genre');
-            $table->foreign("fk_id_genre")->references("id")->on("genres");
+            $table->foreign("fk_id_genre")->references("id")->on("genres")->onUpdate("cascade")->onDelete("cascade");
             $table->timestamps();
         });
     }

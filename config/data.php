@@ -22,14 +22,14 @@ return [
                 "edit" => "genres.edit",
                 "delete" => "genres.destroy"
             ],
-            "chaircategory" => [
-                "index" => "chair-categories.index",
-                "create" => "chair-categories.create",
-                "store" => "chair-categories.store",
-                "detail" => "chair-categories.show",
-                "update" => "chair-categories.update",
-                "edit" => "chair-categories.edit",
-                "delete" => "chair-categories.destroy"
+            "roomcategory" => [
+                "index" => "room-categories.index",
+                "create" => "room-categories.create",
+                "store" => "room-categories.store",
+                "detail" => "room-categories.show",
+                "update" => "room-categories.update",
+                "edit" => "room-categories.edit",
+                "delete" => "room-categories.destroy"
             ],
             "chairs" => [
                 "index" => "chairs.index",
@@ -41,6 +41,9 @@ return [
                 "delete" => "chairs.destroy"
             ],
             "rooms" => [
+                "preview" => [
+                    "index" => "room-preview"
+                ],
                 "index" => "rooms.index",
                 "create" => "rooms.create",
                 "store" => "rooms.store",
@@ -69,6 +72,9 @@ return [
                 "detail" => "admin.film.detail"
             ],
             "rooms" => [
+                "preview" => [
+                    "index" => "admin.room.preview.index"
+                ],
                 "index" => "admin.room.index",
                 "create" => "admin.room.create",
                 "edit" => "admin.room.edit",
@@ -86,11 +92,11 @@ return [
                 "edit" => "admin.genre.edit",
                 "detail" => "admin.genre.detail"
             ],
-            "chaircategory" => [
-                "index" => "admin.chaircategory.index",
-                "create" => "admin.chaircategory.create",
-                "edit" => "admin.chaircategory.edit",
-                "detail" => "admin.chaircategory.detail"
+            "roomcategory" => [
+                "index" => "admin.roomcategory.index",
+                "create" => "admin.roomcategory.create",
+                "edit" => "admin.roomcategory.edit",
+                "detail" => "admin.roomcategory.detail"
             ],
             "chairs" => [
                 "index" => "admin.chair.index",
@@ -112,7 +118,7 @@ return [
         "min_rating" => 7,
         "max_rating" => 21
     ],
-    "chairPrice" => [
+    "roomPrice" => [
         "min" => 10000,
         "max" => 150000
     ],

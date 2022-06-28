@@ -15,10 +15,11 @@ class CreateRoomsTable extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->string("room_name")->unique();
+            $table->string("name")->unique();
             $table->integer("chair_row");
             $table->integer("chair_col");
-            $table->timestamps();
+            $table->unsignedBigInteger('fk_id_room_category');
+            $table->foreign("fk_id_room_category")->references("id")->on("room_categories")->onUpdate("cascade")->onDelete("cascade");
         });
     }
 

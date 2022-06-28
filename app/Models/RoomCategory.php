@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ChairCategory extends Model
+class RoomCategory extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     protected $guarded = ["id"];
 
-    public function chair()
+    public function room()
     {
-        return $this->hasMany(Chair::class);
+        return $this->hasMany(Room::class);
     }
 }

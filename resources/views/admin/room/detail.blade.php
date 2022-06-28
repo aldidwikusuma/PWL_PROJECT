@@ -34,7 +34,6 @@
         }
         .card-body.bioskop{
             overflow-x: auto;
-            background-color: aquamarine;
         }
 
         .room-bioskop{
@@ -42,7 +41,7 @@
         }
     </style>
 
-    <h2 class="mb-3">Detail Room {{ $room->room_name }}</h2>
+    <h2 class="mb-3">Detail Room {{ $room->name }}</h2>
     <div class="col-md-8 p-0 mb-4">
         <a class="btn btn-primary me-5" href="{{ route(config("data.route.admin.rooms.index")) }}">Back to Dashboard</a>
         <a class="btn btn-warning" href="{{ route(config("data.route.admin.rooms.edit"), $room->id) }}">Edit</a>
@@ -53,7 +52,7 @@
                 <span class="form-control border-1 border-primary">Room Name</span>
             </div>
             <div class="col-md-8">
-                <span class="form-control border-1 border-primary">{{ $room->room_name }}</span>
+                <span class="form-control border-1 border-primary">{{ $room->name }}</span>
             </div>
         </div>
         <div class="row my-3 p-0">
@@ -70,6 +69,22 @@
             </div>
             <div class="col-md-8">
                 <span class="form-control border-1 border-primary">{{ $room->chair_col }}</span>
+            </div>
+        </div>
+        <div class="row my-3 p-0">
+            <div class="col-md-4">
+                <span class="form-control border-1 border-primary">Room Category</span>
+            </div>
+            <div class="col-md-8">
+                <span class="form-control border-1 border-primary">{{ $room->category->category }}</span>
+            </div>
+        </div>
+        <div class="row my-3 p-0">
+            <div class="col-md-4">
+                <span class="form-control border-1 border-primary">Room Price</span>
+            </div>
+            <div class="col-md-8">
+                <span class="form-control border-1 border-primary">{{ $room->category->price }}</span>
             </div>
         </div>
     </div>

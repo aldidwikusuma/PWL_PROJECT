@@ -72,12 +72,12 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Data Table</h6>
+                <a class="collapse-item" href="{{ route(config("data.route.admin.chairs.index")) }}">Chairs</a>
+                <a class="collapse-item" href="{{ route(config("data.route.admin.genres.index")) }}">Genres</a>
+                <a class="collapse-item" href="{{ route(config("data.route.admin.roomcategory.index")) }}">Room Category</a>
                 <a class="collapse-item" href="{{ route(config("data.route.admin.films.index")) }}">Films</a>
                 <a class="collapse-item" href="{{ route(config("data.route.admin.schedules.index")) }}">Schedule</a>
                 <a class="collapse-item" href="{{ route(config("data.route.admin.rooms.index")) }}">Rooms</a>
-                <a class="collapse-item" href="{{ route(config("data.route.admin.genres.index")) }}">Genres</a>
-                <a class="collapse-item" href="{{ route(config("data.route.admin.chaircategory.index")) }}">Chair Category</a>
-                <a class="collapse-item" href="{{ route(config("data.route.admin.chairs.index")) }}">Chairs</a>
             </div>
         </div>
     </li>
