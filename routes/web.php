@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\ChairController;
 use App\Http\Controllers\Admin\FilmController;
 use App\Http\Controllers\Admin\GenreController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -40,8 +42,13 @@ Route::middleware("auth")->group(function(){
     Route::resource("/dashboard/genres", GenreController::class)->except(['show']);
     Route::resource('/dashboard/room-categories', RoomCategoryController::class)->except(['show']);
     Route::resource('/dashboard/chairs', ChairController::class)->except(['show']);
+
     Route::get('/dashboard/rooms/{room:id}/preview', [RoomController::class, "previewRoom"])->name("room-preview");
 
+    Route::get('dashboard/user/{user:username}', [UserController::class, "index"])->name("users.index");
+    Route::get('dashboard/user/{user:username}/edit', [UserController::class, "edit"])->name("users.edit");
+    Route::put('dashboard/user/{user:username}/update', [UserController::class, "update"])->name("users.update");
 });
+
 
 
