@@ -7,7 +7,6 @@
             @method("post")
             <div class="input-group">
                 <input id="inputkey" type="text" name="key" value="{{ request("key") }}" autofocus="" autocomplete="off" class="form-control bg-light border-1 border-primary small" placeholder="Search by Film Name or Category Name" />
-                <input id="inputtabel" type="hidden" value="{{ "test" }}" />
                 <div class="input-group-append">
                     <button class="btn btn-primary" type="submit">
                         <i class="fas fa-search fa-sm"></i>
@@ -22,7 +21,7 @@
                 @method("post")
                 <button class="btn btn-success border-0">Generete Report</button>
             </form> --}}
-            <a class="btn btn-success" href="{{ route(config("data.route.admin.rooms.print")) }}">Generate Report</a>
+            <a class="btn btn-success" href="{{ route(config("data.route.admin.films.print")) }}">Generate Report</a>
         @endif
     </div>
     @if (session()->has("success")) 

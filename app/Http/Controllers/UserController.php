@@ -18,6 +18,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        return abort(403);
         return view("admin.profile.edit",[
             "title" => 'User Edit Data']
         );
@@ -25,18 +26,26 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $this->validate($request,[
-            'username' => 'numeric|unique:users,username,'.Auth::user()->id,
-            'email' => 'email|unique:users,email,'.Auth::user()->id,
-            'umur' =>'required|numeric',
+        return abort(403);
+        $rulesData = [
+            'umur' => 'required|integer|between:5,50',
             'jenis_kelamin' => 'required',
-        ]);
+        ];
 
-        $userUpdate = User::where('username', $user->username);
-        $userUpdate->email = $request->email;
-        $userUpdate->umur = $request->umur;
-        $userUpdate->jenisKelamin = $request->jenis_kelamin;
-        $userUpdate->save();
-        return redirect('/dashboard/user',Auth::user()->username) -> with('success', 'Data berhasil diubah');
+        if ($user->email != $request->email) {
+            $rulesData['email'] = 'required|email|unique:users';
+        }
+
+        if ($user->username != $request->username) {
+            $rulesData['username'] = 'required|unique:users';
+        }
+
+        $validatedData = $request->validate($rulesData);
+
+        return dd($validatedData);
+
+        User::where("username", $user->username)->update($validatedData);
+
+        return redirect(route("users.index", $user->username))->with('success', 'Profile has been updated');
     }
 }

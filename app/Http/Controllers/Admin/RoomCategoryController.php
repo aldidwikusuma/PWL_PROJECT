@@ -128,17 +128,17 @@ class RoomCategoryController extends Controller
 
     public function print()
     {
-        $genres = Genre::all();
-        // return view("admin.genre.print", [
+        $categories = RoomCategory::all();
+        return view("admin.roomcategory.print", [
+            "title" => "Data Table Room Category",
+            "categories" => $categories,
+            "column" => 6
+        ]);
+        // $pdf = PDF::loadview('admin.genre.print', [
         //     "title" => "Data Table Genres",
         //     "genres" => $genres,
         //     "column" => 6
         // ]);
-        $pdf = PDF::loadview('admin.genre.print', [
-            "title" => "Data Table Genres",
-            "genres" => $genres,
-            "column" => 6
-        ]);
-        return $pdf->download();
+        // return $pdf->download();
     }
 }

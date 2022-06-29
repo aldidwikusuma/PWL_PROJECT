@@ -22,7 +22,7 @@
                 @method("post")
                 <button class="btn btn-success border-0">Generete Report</button>
             </form> --}}
-            <a class="btn btn-success" href="{{ route(config("data.route.admin.genres.print")) }}">Generate Report</a>
+            <a class="btn btn-success" href="{{ route(config("data.route.admin.chairs.print")) }}">Generate Report</a>
         @endif
     </div>
     @if (session()->has("success")) 

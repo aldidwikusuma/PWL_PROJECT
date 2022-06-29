@@ -124,16 +124,16 @@ class ChairController extends Controller
     public function print()
     {
         $chairs = Chair::all();
-        // return view("admin.genre.print", [
-        //     "title" => "Data Table Genres",
-        //     "genres" => $genres,
-        //     "column" => 6
-        // ]);
-        $pdf = PDF::loadview('admin.genre.print', [
+        return view("admin.chair.print", [
             "title" => "Data Table Chairs",
-            "genres" => $chairs,
+            "chairs" => $chairs,
             "column" => 6
         ]);
-        return $pdf->stream();
+        // $pdf = PDF::loadview('admin.genre.print', [
+        //     "title" => "Data Table Chairs",
+        //     "genres" => $chairs,
+        //     "column" => 6
+        // ]);
+        // return $pdf->stream();
     }
 }

@@ -60,17 +60,23 @@ Route::middleware("auth")->group(function(){
 
 
     // Print
-    // Route::post('/dashboard/genres/print', [GenreController::class, "print"])->name("genres.print");
+    // Route::post('/dashboard/chairs/print', [ChairController::class, "print"])->name("chairs.print");
+    Route::get('/dashboard/chairs/print', [ChairController::class, "print"])->name("chairs.print");
+
+    Route::get('/dashboard/room-categories/print', [RoomCategoryController::class, "print"])->name("room-categories.print");
+
     Route::get('dashboard/genres/print', [GenreController::class, "print"])->name("genres.print");
-    Route::get('dashboard/films/search', [FilmController::class, "print"])->name("films.print");
+
     Route::get('dashboard/rooms/print', [RoomController::class, "print"])->name("rooms.print");
 
+    Route::get('dashboard/films/print', [FilmController::class, "print"])->name("films.print");
 
+    Route::get('/dashboard/schedules/print', [ScheduleController::class, "print"])->name("schedules.print");
 
 });
 
 
-Route::get('print', [ScheduleController::class, "print"])->name("schedules.print");
+
 
 
 
