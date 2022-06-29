@@ -111,4 +111,29 @@ class ChairController extends Controller
         Chair::destroy($chair->id);
         return redirect(route(config("data.route.admin.chairs.index")))->with("success", "Chair Category has been deleted");
     }
+
+    public function search(Request $request)
+    {
+        $chairs = Chair::where("name", "like", "%$request->key%")->paginate(10);
+        return view(config("data.view.admin.chairs.index"), [
+            "title" => "Table Chairs",
+            "chairs" => $chairs,
+        ]);
+    }
+
+    public function print()
+    {
+        $chairs = Chair::all();
+        // return view("admin.genre.print", [
+        //     "title" => "Data Table Genres",
+        //     "genres" => $genres,
+        //     "column" => 6
+        // ]);
+        $pdf = PDF::loadview('admin.genre.print', [
+            "title" => "Data Table Chairs",
+            "genres" => $chairs,
+            "column" => 6
+        ]);
+        return $pdf->stream();
+    }
 }

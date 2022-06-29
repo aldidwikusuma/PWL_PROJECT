@@ -58,7 +58,7 @@
                         <span class="form-control border-1 border-primary">Room</span>
                     </div>
                     <div class="col-md-8">
-                        <span class="form-control border-1 border-primary">{{ $schedule->room->room_name }}</span>
+                        <span class="form-control border-1 border-primary">{{ $schedule->room->name }}</span>
                     </div>
                 </div>
                 <div class="row my-3 p-0">

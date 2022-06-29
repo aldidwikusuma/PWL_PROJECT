@@ -116,4 +116,29 @@ class RoomCategoryController extends Controller
         RoomCategory::destroy($roomCategory->id);
         return redirect(route(config("data.route.admin.roomcategory.index")))->with("success", "Room Category has been deleted");
     }
+
+    public function search(Request $request)
+    {
+        $categories = RoomCategory::where("category", "like", "%$request->key%")->paginate(5);
+        return view(config("data.view.admin.roomcategory.index"), [
+            "title" => "Table Room Category",
+            "categories" => $categories,
+        ]);
+    }
+
+    public function print()
+    {
+        $genres = Genre::all();
+        // return view("admin.genre.print", [
+        //     "title" => "Data Table Genres",
+        //     "genres" => $genres,
+        //     "column" => 6
+        // ]);
+        $pdf = PDF::loadview('admin.genre.print', [
+            "title" => "Data Table Genres",
+            "genres" => $genres,
+            "column" => 6
+        ]);
+        return $pdf->download();
+    }
 }

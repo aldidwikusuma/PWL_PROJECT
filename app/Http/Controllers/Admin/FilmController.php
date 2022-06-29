@@ -202,4 +202,46 @@ class FilmController extends Controller
         Film::destroy($film->id);
         return redirect(route(config("data.route.admin.films.index")))->with("success", "Film has been deleted");
     }
+
+    public function search(Request $request)
+    {
+        $films = NULL;
+        $genre = Genre::where("genre_name", "like", "%$request->key%")->first();
+        if ($genre) {     
+            $films = Film::where("fk_id_genre", $genre->id)->paginate(5);
+        } else {
+            $films = Film::where("title", "like", "%$request->key%")->paginate(5);
+        }
+        if ($request->key == "") {
+            $films = Film::paginate(5);
+        }
+
+        if ($films) {
+            foreach ($films as $filmsatuan) {
+                $filmsatuan["hour"] = (integer) floor($filmsatuan["duration"] / 60);
+                $filmsatuan["minute"] = $filmsatuan["duration"] % 60;
+            }
+        }
+
+        return view(config("data.view.admin.films.index"), [
+            "title" => "Table Films",
+            "films" => $films,
+        ]);
+    }
+
+    public function print()
+    {
+        $films = Film::all();
+        return view("admin.film.print", [
+            "title" => "Data Table Films",
+            "films" => $films,
+            "column" => 12
+        ]);
+        // $pdf = PDF::loadview('admin.genre.print', [
+        //     "title" => "Data Table Genres",
+        //     "genres" => $genres,
+        //     "column" => 6
+        // ]);
+        // return $pdf->download();
+    }
 }

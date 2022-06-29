@@ -10,7 +10,7 @@ class Film extends Model
     use HasFactory;
 
     protected $guarded = ["id"];
-    protected $with = ['genre', 'schedule'];
+    protected $with = ['genre'];
 
     public function genre()
     {

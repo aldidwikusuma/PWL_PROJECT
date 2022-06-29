@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
+use Barryvdh\DomPDF\Facade as PDF;
+
+// use PDF;
 use App\Http\Controllers\Controller;
 use App\Models\Film;
 use App\Models\Room;
@@ -125,8 +130,7 @@ class ScheduleController extends Controller
         $schedule->film["hour"] = (integer) floor($schedule->film["duration"] / 60);
         $schedule->film["minute"] = $schedule->film["duration"] % 60;
         
-        return view(config("data.view.a
-        dmin.schedules.detail"), [
+        return view(config("data.view.admin.schedules.detail"), [
             "title" => "Detail Schedule",
             "schedule" => $schedule
         ]);
@@ -235,5 +239,46 @@ class ScheduleController extends Controller
     {
         Schedule::destroy($schedule->id);
         return redirect(route(config("data.route.admin.schedules.index")))->with("success", "Schedule has been deleted");
+    }
+
+    public function search(Request $request)
+    {
+        $schedules = [];
+        $film = Film::where("title", "like", "%$request->key%")->first();
+        if ($film) {     
+            $schedules = Schedule::where("fk_id_film", $film->id)->paginate(7);
+        } 
+        $room = Room::where("name", "like", "%$request->key%")->first();
+        if ($room) {
+            $schedules = Schedule::where("fk_id_room", $room->id)->paginate(7);
+        }
+        if (!$room && !$film) {
+            $schedules = Schedule::where("date", "x")->paginate(7);
+        }
+        if ($request->key == "") {
+            $schedules = Schedule::paginate(7);
+        }
+        return view(config("data.view.admin.schedules.index"), [
+            "title" => "Table Schedules",
+            "schedules" => $schedules,
+        ]);
+    }
+
+    public function print()
+    {
+        $schedules = Schedule::all();
+        // return view("admin.schedule.print", [
+        //     "title" => "Data Table Schedules",
+        //     "schedules" => $schedules,
+        //     "column" => 12
+        // ]);
+        // $pdf = PDF::loadview('admin.schedule.print', [
+        //     "title" => "Data Table Schedules",
+        //     "schedules" => $schedules,
+        //     "column" => 12
+        // ]);
+        $pdf = PDF::loadview('admin.schedule.print', compact("schedules"));
+
+        return $pdf->stream();
     }
 }
