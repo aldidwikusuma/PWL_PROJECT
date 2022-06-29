@@ -54,9 +54,9 @@
 					<select class="form-select" name="fk_id_room" id="fk_id_room" required>
 						@foreach ($rooms as $room)
 							@if (old("fk_id_room") == $room["id"])
-								<option value="{{ $room["id"] }}" selected>{{ $room["room_name"] }}</option>
+								<option value="{{ $room["id"] }}" selected>{{ $room["name"] }}</option>
 							@else
-								<option value="{{ $room["id"] }}">{{ $room["room_name"] }}</option>
+								<option value="{{ $room["id"] }}">{{ $room["name"] }}</option>
 							@endif
 						@endforeach
 					</select>

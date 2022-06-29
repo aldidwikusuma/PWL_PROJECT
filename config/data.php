@@ -16,7 +16,9 @@ return [
                 "detail" => "films.show",
                 "update" => "films.update",
                 "edit" => "films.edit",
-                "delete" => "films.destroy"
+                "delete" => "films.destroy",
+                "search" => "films.search",
+                "print" => "films.print"
             ],
             "genres" => [
                 "index" => "genres.index",
@@ -25,7 +27,9 @@ return [
                 "detail" => "genres.show",
                 "update" => "genres.update",
                 "edit" => "genres.edit",
-                "delete" => "genres.destroy"
+                "delete" => "genres.destroy",
+                "search" => "genres.search",
+                "print" => "genres.print"
             ],
             "roomcategory" => [
                 "index" => "room-categories.index",
@@ -34,7 +38,9 @@ return [
                 "detail" => "room-categories.show",
                 "update" => "room-categories.update",
                 "edit" => "room-categories.edit",
-                "delete" => "room-categories.destroy"
+                "delete" => "room-categories.destroy",
+                "search" => "room-categories.search",
+                "print" => "room-categories.print"
             ],
             "chairs" => [
                 "index" => "chairs.index",
@@ -43,7 +49,9 @@ return [
                 "detail" => "chairs.show",
                 "update" => "chairs.update",
                 "edit" => "chairs.edit",
-                "delete" => "chairs.destroy"
+                "delete" => "chairs.destroy",
+                "search" => "chairs.search",
+                "print" => "chairs.print"
             ],
             "rooms" => [
                 "preview" => [
@@ -55,7 +63,9 @@ return [
                 "detail" => "rooms.show",
                 "update" => "rooms.update",
                 "edit" => "rooms.edit",
-                "delete" => "rooms.destroy"
+                "delete" => "rooms.destroy",
+                "search" => "rooms.search",
+                "print" => "rooms.print"
             ],
             "schedules" => [
                 "index" => "schedules.index",
@@ -64,7 +74,9 @@ return [
                 "detail" => "schedules.show",
                 "update" => "schedules.update",
                 "edit" => "schedules.edit",
-                "delete" => "schedules.destroy"
+                "delete" => "schedules.destroy",
+                "search" => "schedules.search",
+                "print" => "schedules.print"
             ]
         ]
     ],

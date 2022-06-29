@@ -45,10 +45,32 @@ Route::middleware("auth")->group(function(){
 
     Route::get('/dashboard/rooms/{room:id}/preview', [RoomController::class, "previewRoom"])->name("room-preview");
 
+    // User
     Route::get('dashboard/user/{user:username}', [UserController::class, "index"])->name("users.index");
     Route::get('dashboard/user/{user:username}/edit', [UserController::class, "edit"])->name("users.edit");
     Route::put('dashboard/user/{user:username}/update', [UserController::class, "update"])->name("users.update");
+
+    // Search
+    Route::post('dashboard/chairs/search', [ChairController::class, "search"])->name("chairs.search");
+    Route::post('dashboard/films/search', [FilmController::class, "search"])->name("films.search");
+    Route::post('dashboard/genres/search', [GenreController::class, "search"])->name("genres.search");
+    Route::post('dashboard/rooms/search', [RoomController::class, "search"])->name("rooms.search");
+    Route::post('dashboard/room-categories/search', [RoomCategoryController::class, "search"])->name("room-categories.search");
+    Route::post('dashboard/schedules/search', [ScheduleController::class, "search"])->name("schedules.search");
+
+
+    // Print
+    // Route::post('/dashboard/genres/print', [GenreController::class, "print"])->name("genres.print");
+    Route::get('dashboard/genres/print', [GenreController::class, "print"])->name("genres.print");
+    Route::get('dashboard/films/search', [FilmController::class, "print"])->name("films.print");
+    Route::get('dashboard/rooms/print', [RoomController::class, "print"])->name("rooms.print");
+
+
+
 });
+
+
+Route::get('print', [ScheduleController::class, "print"])->name("schedules.print");
 
 
 

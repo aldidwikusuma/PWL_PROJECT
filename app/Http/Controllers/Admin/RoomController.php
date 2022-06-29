@@ -411,4 +411,38 @@ class RoomController extends Controller
             "chairs" => $chairs
         ]);
     }
+
+    public function search(Request $request)
+    {
+        $rooms = NULL;
+        $category = RoomCategory::where("category", "like", "%$request->key%")->first();
+        if ($category) {     
+            $rooms = Room::where("fk_id_room_category", $category->id)->paginate(5);
+        } else {
+            $rooms = Room::where("name", "like", "%$request->key%")->paginate(5);
+        }
+        if ($request->key == "") {
+            $rooms = Room::paginate(5);
+        }
+        return view(config("data.view.admin.rooms.index"), [
+            "title" => "Table Rooms",
+            "rooms" => $rooms,
+        ]);
+    }
+
+    public function print()
+    {
+        $rooms = Room::all();
+        return view("admin.room.print", [
+            "title" => "Data Table Rooms",
+            "rooms" => $rooms,
+            "column" => 12
+        ]);
+        // $pdf = PDF::loadview('admin.genre.print', [
+        //     "title" => "Data Table Genres",
+        //     "genres" => $genres,
+        //     "column" => 6
+        // ]);
+        // return $pdf->download();
+    }
 }

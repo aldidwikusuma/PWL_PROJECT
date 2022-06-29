@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use PDF;
 use App\Http\Controllers\Controller;
 use App\Models\Genre;
+// use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+// use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use Illuminate\Http\Request;
 
 class GenreController extends Controller
@@ -108,5 +111,30 @@ class GenreController extends Controller
     {
         Genre::destroy($genre->id);
         return redirect(route(config("data.route.admin.genres.index")))->with("success", "Genre has been deleted");
+    }
+
+    public function search(Request $request)
+    {
+        $genres = Genre::where("genre_name", "like", "%$request->key%")->paginate(5);
+        return view(config("data.view.admin.genres.index"), [
+            "title" => "Table Genres",
+            "genres" => $genres,
+        ]);
+    }
+
+    public function print()
+    {
+        $genres = Genre::all();
+        // return view("admin.genre.print", [
+        //     "title" => "Data Table Genres",
+        //     "genres" => $genres,
+        //     "column" => 6
+        // ]);
+        $pdf = PDF::loadview('admin.genre.print', [
+            "title" => "Data Table Genres",
+            "genres" => $genres,
+            "column" => 6
+        ]);
+        return $pdf->download();
     }
 }
