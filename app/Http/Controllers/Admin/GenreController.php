@@ -125,16 +125,16 @@ class GenreController extends Controller
     public function print()
     {
         $genres = Genre::all();
-        return view("admin.genre.print", [
-            "title" => "Data Table Genres",
-            "genres" => $genres,
-            "column" => 6
-        ]);
-        // $pdf = PDF::loadview('admin.genre.print', [
+        // return view("admin.genre.print", [
         //     "title" => "Data Table Genres",
         //     "genres" => $genres,
         //     "column" => 6
         // ]);
-        // return $pdf->stream();
+        $pdf = PDF::loadview('admin.genre.print', [
+            "title" => "Data Table Genres",
+            "genres" => $genres,
+            "column" => 6
+        ]);
+        return $pdf->stream();
     }
 }
