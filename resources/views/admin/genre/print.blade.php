@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Report PDF</title>
-    @include('admin.layouts.style')
+    {{-- @include('admin.layouts.style') --}}
 </head>
 
 <body id="page-top">
@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    @include('admin.layouts.scriptjs')
+    {{-- @include('admin.layouts.scriptjs') --}}
 </body>
 
 </html>

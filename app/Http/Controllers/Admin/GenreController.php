@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use PDF;
+// use 
+// use PDF;
 use App\Http\Controllers\Controller;
 use App\Models\Genre;
-// use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
-// use Barryvdh\DomPDF\PDF as DomPDFPDF;
+// use Barryvdh\DomPDF\Facade as PDF;
+// use Barryvdh\DomPDF\PDF as PDF;
+
+use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Http\Request;
 
 class GenreController extends Controller
@@ -16,6 +20,9 @@ class GenreController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public const ROUTEINDEX = "data.route.admin.genres.index";
+
     public function index()
     {
         $genres = Genre::paginate(5);
@@ -52,7 +59,7 @@ class GenreController extends Controller
         $validatedData = $request->validate($rulesData);
 
         Genre::create($validatedData);
-        return redirect(route(config("data.route.admin.genres.index")))->with("success", "Genre has been added");
+        return redirect(route(config(GenreController::ROUTEINDEX)))->with("success", "Genre has been added");
     }
 
     /**
@@ -98,7 +105,7 @@ class GenreController extends Controller
 
         Genre::where("id", $genre->id)->update($validatedData);
 
-        return redirect(route(config("data.route.admin.genres.index")))->with("success", "Genre has been updated");
+        return redirect(route(config(GenreController::ROUTEINDEX)))->with("success", "Genre has been updated");
     }
 
     /**
@@ -110,7 +117,7 @@ class GenreController extends Controller
     public function destroy(Genre $genre)
     {
         Genre::destroy($genre->id);
-        return redirect(route(config("data.route.admin.genres.index")))->with("success", "Genre has been deleted");
+        return redirect(route(config(GenreController::ROUTEINDEX)))->with("success", "Genre has been deleted");
     }
 
     public function search(Request $request)
@@ -125,16 +132,11 @@ class GenreController extends Controller
     public function print()
     {
         $genres = Genre::all();
-        return view("admin.genre.print", [
+        $pdf = PDF::loadview('admin.genre.print', [
             "title" => "Data Table Genres",
             "genres" => $genres,
             "column" => 6
         ]);
-        // $pdf = PDF::loadview('admin.genre.print', [
-        //     "title" => "Data Table Genres",
-        //     "genres" => $genres,
-        //     "column" => 6
-        // ]);
-        // return $pdf->stream();
+        return $pdf->stream();
     }
 }
