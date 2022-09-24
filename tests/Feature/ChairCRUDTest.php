@@ -120,7 +120,6 @@ class ChairCRUDTest extends TestCase
         $response = $this->actingAs(LoginTest::createUser())->post(ChairCRUDTest::URL_TEST . "/wrong", [
             '_method' => 'DELETE',
         ]); 
-
         $response->assertStatus(404);
     }
 }
