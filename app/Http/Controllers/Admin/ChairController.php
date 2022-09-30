@@ -14,6 +14,7 @@ class ChairController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $chairs = Chair::orderBy("name")->paginate(10);
@@ -43,7 +44,6 @@ class ChairController extends Controller
      */
     public function store(Request $request)
     {
-        // return dd($request);
         $rulesData = [
             "name" => "required|max:255|unique:chairs",
         ];
@@ -51,7 +51,7 @@ class ChairController extends Controller
         $validatedData = $request->validate($rulesData);
 
         Chair::create($validatedData);
-        return redirect(route(config("data.route.admin.chairs.index")))->with("success", "Chair has been added");
+        return redirect(route(config("data.route.admin.chairs.store")))->with("success", "Chair has been added");
     }
 
     /**
@@ -129,11 +129,5 @@ class ChairController extends Controller
             "chairs" => $chairs,
             "column" => 6
         ]);
-        // $pdf = PDF::loadview('admin.genre.print', [
-        //     "title" => "Data Table Chairs",
-        //     "genres" => $chairs,
-        //     "column" => 6
-        // ]);
-        // return $pdf->stream();
     }
 }

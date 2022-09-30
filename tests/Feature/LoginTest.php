@@ -5,6 +5,10 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+<<<<<<< HEAD
+=======
+use Illuminate\Support\Facades\Hash;
+>>>>>>> cf5deeedf1f1a86955fcb9009746b2fff0b394c1
 use Tests\TestCase;
 
 class LoginTest extends TestCase

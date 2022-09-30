@@ -16,6 +16,10 @@ class ExampleTest extends TestCase
     {
         // $response = $this->get('/');
 
+<<<<<<< HEAD
         // $response->assertStatus(200);
+=======
+        $response->assertStatus(302);
+>>>>>>> cf5deeedf1f1a86955fcb9009746b2fff0b394c1
     }
 }

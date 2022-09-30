@@ -16,6 +16,13 @@ class FilmController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public const DATATIME = [
+        "min_rate" => "data.rating.min_rating",
+        "max_rate" => "data.rating.max_rating",
+
+    ];
+    
     public function index()
     {
         $films = Film::orderBy("title")->paginate(5);
@@ -45,8 +52,8 @@ class FilmController extends Controller
             "max_minute" => config('data.time.max_minute'),
         ];
         $rating = [
-            "min_rating" => config("data.rating.min_rating"),
-            "max_rating" => config("data.rating.max_rating")
+            "min_rating" => config(FilmController::DATATIME["min_rate"]),
+            "max_rating" => config(FilmController::DATATIME["max_rate"])
         ];
 
         return view(config("data.view.admin.films.create"), [
@@ -94,7 +101,7 @@ class FilmController extends Controller
         Arr::forget($validatedData, ["hour", "minute"]);
 
         Film::create($validatedData);
-        return redirect(route(config("data.route.admin.films.index")))->with("success", "Film has been added");
+        return redirect(route(config("data.route.admin.films.store")))->with("success", "Film has been added");
     }
 
     /**
@@ -237,11 +244,5 @@ class FilmController extends Controller
             "films" => $films,
             "column" => 12
         ]);
-        // $pdf = PDF::loadview('admin.genre.print', [
-        //     "title" => "Data Table Genres",
-        //     "genres" => $genres,
-        //     "column" => 6
-        // ]);
-        // return $pdf->download();
     }
 }
